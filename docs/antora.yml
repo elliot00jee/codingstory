@@ -2,6 +2,7 @@ name: codingstory
 title: CodingStory
 version: latest
 display_version: default
+start_page: documentation:get-started.adoc
 asciidoc:
   attributes:
     source-language: asciidoc@

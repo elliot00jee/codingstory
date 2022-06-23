@@ -1,2 +1,3 @@
-.Antora
+.Documentation
+** Antora
 * xref:get-started.adoc[]
