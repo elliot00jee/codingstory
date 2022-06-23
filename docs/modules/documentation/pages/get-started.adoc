@@ -111,7 +111,7 @@ ui: #<.>
 ----
 <.> <<demo-playbook>> 에서 `site.url` 을 명시하지 않았다면, 404.html 및 sitemap 파일들은 생성되지 않는다.
 
-[IMPORTANT]
+[TIP]
 기본적으로 Antora는 <<demo-playbook>> 에서 정의한 git 리포지토리 및 UI 번들을 캐싱한다. 해당 git 리포지토리에 변경이 있어도 캐싱된 데이터를 사용할 수 있기 때문에, Antora에 익숙해질 때 까지는 `--fetch` 옵션을 사용하여 리소스를 새로 가져올 수 있게 하는게 좋다.
 
 
