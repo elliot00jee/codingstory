@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Antora로 페이지 생성하기 :: mypage</title>
+    <link rel="canonical" href="https://elliot00jee.github.io/mypage/codingstory/latest/documentation/get-started.html">
+    <meta name="generator" content="Antora 3.0.1">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/site-extra.css">
+    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <a href="https://elliot00jee.github.io/mypage">mypage</a>
+      </div>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="codingstory" data-version="latest">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">CodingStory</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">👋 Hi, Stranger</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Antora</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="get-started.html">Antora로 페이지 생성하기</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">CodingStory</span>
+    <span class="version">default</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">CodingStory</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">default</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">CodingStory</a></li>
+    <li>Documentation</li>
+    <li>Antora</li>
+    <li><a href="get-started.html">Antora로 페이지 생성하기</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/elliot00jee/codingstory/edit/main/docs/modules/documentation/pages/get-started.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Antora로 페이지 생성하기</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>환경은 Ubuntu 20.04(WLS) 이고, 오늘 해볼 것들은 다음과 같다.</p>
+</div>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p><i class="fa fa-check-square-o"></i> Node.js 설치하기</p>
+</li>
+<li>
+<p><i class="fa fa-check-square-o"></i> Antora 설치하기</p>
+</li>
+<li>
+<p><i class="fa fa-check-square-o"></i> 첫번째 Antora playbook 생성하기</p>
+</li>
+<li>
+<p><i class="fa fa-check-square-o"></i> 생성한 playbook 기반으로 정적 사이트를 생성하기</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="install-nodejs"><a class="anchor" href="#install-nodejs"></a>nvm과 Node.js 설치하기</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Antora는 Node.js로 빌드되기 때문에 Antora를 설치하고 구동하기 위해서는 Node.js(LTS)가 필요하다. (필요한 커맨드: <code>node</code>, <code>npm</code>, <code>npx</code>) Node.js를 설치하는 방법은 다양하지만, Antora에서 권장하는 <a href="https://github.com/nvm-sh/nvm" target="_blank" rel="noopener">Node Version Manager (nvm)</a>을 사용해서 설치해도록 하자.</p>
+</div>
+<div class="paragraph">
+<p>다음 명령어를 순서대로 실행해보자. 설치 스크립트를 다운 받아서 실행하고, 환경 변수 및 자동 완성 관련된 기능들이 프로필 파일에 추가된다.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+$ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] &amp;&amp; printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+$ [ -s "$NVM_DIR/nvm.sh" ] &amp;&amp; \. "$NVM_DIR/nvm.sh" # This loads nvm
+$ nvm version
+v16.15.1</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>nvm이 설치되고 나면, Node.js LTS 버전을 설치하자.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ nvm install --lts
+$ node --version
+v16.15.1</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>이미 설치된 Node.js의 버전이 최신 LTS가 아닐 경우에는 동일한 명령으로 업그레이드 한 뒤, 기본 Node.js 버전을 16으로 지정한다.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ nvm install --lts
+$ nvm alias default 16</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="install-antora"><a class="anchor" href="#install-antora"></a>Antora 설치하기</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Antora로 정적 페이지를 생성하기 위해서는 Antora CLI와 Antora site generator를 설치해야 한다. playbook 프로젝트가 생성될 새 디렉토리를 만들어서 이동 한 뒤, 필요한 패키지를 설치해보자.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ mkdir docs-site &amp;&amp; cd docs-site
+$ node -e "fs.writeFileSync('package.json', '{}')"
+$ npm i -D -E @antora/cli@3.0 @antora/site-generator@3.0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>antora 커맨드를 실행해보면, cli와 site generator가 잘 설치된 것을 확인할 수 있다.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ antora -v
+@antora/cli: 3.0.1
+@antora/site-generator: 3.0.1</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="create-playbook"><a class="anchor" href="#create-playbook"></a>playbook 생성하기</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Antora가 정적 페이지를 생성하기 위해서는 playbook을 필요로 한다. 전 단계에서 생성한 <code>docs-site</code> 디렉토리 내에 <code><a href="#demo-playbook">antora-playbook.yml</a></code> 을 생성한 뒤, 아래와 같이 입력하고 저장해보자.</p>
+</div>
+<div id="demo-playbook" class="listingblock">
+<div class="title">antora-playbook.yml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">site:
+  title: Antora Docs <i class="conum" data-value="1"></i><b>(1)</b>
+  url: https://elliot00jee.github.io/antora <i class="conum" data-value="2"></i><b>(2)</b>
+  start_page: component-b::index.adoc <i class="conum" data-value="3"></i><b>(3)</b>
+content:
+  sources:
+  - url: https://gitlab.com/antora/demo/demo-component-a.git <i class="conum" data-value="4"></i><b>(4)</b>
+    branches: HEAD <i class="conum" data-value="5"></i><b>(5)</b>
+  - url: https://gitlab.com/antora/demo/demo-component-b.git
+    branches: [v2.0, v1.0]
+    start_path: docs <i class="conum" data-value="6"></i><b>(6)</b>
+ui: <i class="conum" data-value="7"></i><b>(7)</b>
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
+    snapshot: true</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>사이트의 제목으로, 상단 왼쪽에 노출된다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>사이트의 URL을 의미한다. Optional 값이지만, 비워놓으면 URL 값을 필요로 하는 특정 기능들이 자동으로 비활성화 되므로 입력하는 것을 권장한다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>사이트에서 시작 페이지로 사용할 페이지 정보로, 버전을 생략할 경우 <code>latest</code> 버전의 컴포넌트에서 페이지를 가져온다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Antora가 필요한 컨텐츠들을 가져올 때 참고할 git 리포지토리 URL</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>브랜치 이름(또는 패턴). <code>branches</code> 나 <code>tags</code> 값이 없을 경우에는 로컬은 현재 브랜치, 리모트는 기본 브랜치가 적용된다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>컴포넌트의 루트 상태 경로이며, antora.yml 파일이 있는 곳이다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Antora가 사이트를 생성하기 위해 사용하는 UI 번들. 버전이 계속 변하기 때문에, <code>snapshot: true</code> 로 설정한다.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="run-antora"><a class="anchor" href="#run-antora"></a>Antora 실행하기</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>위에서 작성한 <a href="#demo-playbook">antora-playbook.yml</a> 이 있는 위치(`docs-site)로 이동한 뒤, 다음 명령어를 입력한다.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ antora --fetch antora-playbook.yml
+[fetch] https://gitlab.com/antora/demo/demo-component-a.git [#########################################################################################]
+[fetch] https://gitlab.com/antora/demo/demo-component-b.git [#########################################################################################]
+Site generation complete!
+Open file:///home/elliot00jee/github/antora-test/build/site/index.html in a browser to view your site.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>디렉토리 구조를 확인해보면 다음과 같다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">📂 docs-site
+  📂 build
+    📂 _
+      📂 css
+      📂 font
+      📂 img
+      📂 js
+    📂 component-a
+    📂 component-b
+    📄 index.html
+    📄 404.html <i class="conum" data-value="1"></i><b>(1)</b>
+    📄 sitemap-component-a.xml
+    📄 sitemap-component-b.xml
+    📄 sitemap.xml
+  📂 node_modules
+  📂 node_modules
+  📄 antora-playbook.yml
+  📄 package-lock.json
+  📄 package.json</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><a href="#demo-playbook">antora-playbook.yml</a> 에서 <code>site.url</code> 을 명시하지 않았다면, 404.html 및 sitemap 파일들은 생성되지 않는다.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+기본적으로 Antora는 <a href="#demo-playbook">antora-playbook.yml</a> 에서 정의한 git 리포지토리 및 UI 번들을 캐싱한다. 해당 git 리포지토리에 변경이 있어도 캐싱된 데이터를 사용할 수 있기 때문에, Antora에 익숙해질 때 까지는 <code>--fetch</code> 옵션을 사용하여 리소스를 새로 가져올 수 있게 하는게 좋다.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Antora를 사용해 정적 페이지가 생성되었다. <code>docs-site/build/site/index.html</code> 파일을 확인해보자.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/1.png" alt="1">
+</div>
+</div>
+<div class="paragraph">
+<p>다음에는 생성된 정적 사이트를 Github Action과 Github Page를 사용해서 배포해 보도록 하자.</p>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Copyright © <a href="https://opendevise.com">OpenDevise Inc.</a> and individual contributors to <a href="https://antora.org">Antora</a>. Site deploys by <a href="https://netlify.com">Netlify</a>.</p>
+  <p>Except where otherwise noted, docs.antora.org, Antora, and the Antora UI, are licensed under the <a href="https://www.mozilla.org/en-US/MPL/2.0/">Mozilla Public License Version 2.0</a> (MPL-2.0).</p>
+  <p>AsciiDoc® is a trademark of the Eclipse Foundation, Inc.</p>
+</footer>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
