@@ -1,0 +1,16 @@
+site:
+  title: mypage
+  start_page: codingstory::index.adoc
+  url: https://elliot00jee.github.io/mypage
+content:
+  sources:
+  - url: ../codingstory
+    branches: main
+    start_path: docs
+ui:
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
+    snapshot: true
+  supplemental_files: ./supplemental-ui
+runtime:
+  fetch: true

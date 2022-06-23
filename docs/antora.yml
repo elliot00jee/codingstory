@@ -1,8 +1,8 @@
 name: codingstory
 title: CodingStory
 version: latest
-display_version: default
-start_page: documentation:index.adoc
+display_version: default  
+start_page: codingstory::index.adoc
 asciidoc:
   attributes:
     source-language: asciidoc@
