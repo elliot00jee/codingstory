@@ -2,12 +2,13 @@ name: codingstory
 title: CodingStory
 version: latest
 display_version: default
-start_page: documentation:get-started.adoc
+start_page: documentation:index.adoc
 asciidoc:
   attributes:
     source-language: asciidoc@
     xrefstyle: short@
     listing-caption: Example@
 nav:
+  - modules/ROOT/nav.adoc
   - modules/documentation/nav.adoc
 
