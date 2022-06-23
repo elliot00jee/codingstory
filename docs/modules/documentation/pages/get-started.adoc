@@ -1,0 +1,122 @@
+= Antora로 페이지 생성하기
+:url-nvm: https://github.com/nvm-sh/nvm
+:listing-caption!:
+
+환경은 Ubuntu 20.04(WLS) 이고, 오늘 해볼 것들은 다음과 같다.
+
+* [x] Node.js 설치하기
+* [x] Antora 설치하기
+* [x] 첫번째 Antora playbook 생성하기
+* [x] 생성한 playbook 기반으로 정적 사이트를 생성하기
+
+[#install-nodejs]
+== nvm과 Node.js 설치하기
+Antora는 Node.js로 빌드되기 때문에 Antora를 설치하고 구동하기 위해서는 Node.js(LTS)가 필요하다. (필요한 커맨드: `node`, `npm`, `npx`) Node.js를 설치하는 방법은 다양하지만, Antora에서 권장하는 {url-nvm}[Node Version Manager (nvm)^]을 사용해서 설치해도록 하자.
+
+다음 명령어를 순서대로 실행해보자. 설치 스크립트를 다운 받아서 실행하고, 환경 변수 및 자동 완성 관련된 기능들이 프로필 파일에 추가된다.
+
+    $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    $ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+    $ [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+    $ nvm version
+    v16.15.1
+
+nvm이 설치되고 나면, Node.js LTS 버전을 설치하자.
+
+    $ nvm install --lts
+    $ node --version
+    v16.15.1
+
+이미 설치된 Node.js의 버전이 최신 LTS가 아닐 경우에는 동일한 명령으로 업그레이드 한 뒤, 기본 Node.js 버전을 16으로 지정한다.
+
+    $ nvm install --lts
+    $ nvm alias default 16
+
+[#install-antora]
+== Antora 설치하기
+Antora로 정적 페이지를 생성하기 위해서는 Antora CLI와 Antora site generator를 설치해야 한다. playbook 프로젝트가 생성될 새 디렉토리를 만들어서 이동 한 뒤, 필요한 패키지를 설치해보자.
+
+    $ mkdir docs-site && cd docs-site
+    $ node -e "fs.writeFileSync('package.json', '{}')"
+    $ npm i -D -E @antora/cli@3.0 @antora/site-generator@3.0
+
+antora 커맨드를 실행해보면, cli와 site generator가 잘 설치된 것을 확인할 수 있다.
+
+    $ antora -v
+    @antora/cli: 3.0.1
+    @antora/site-generator: 3.0.1
+
+[#create-playbook]
+== playbook 생성하기
+Antora가 정적 페이지를 생성하기 위해서는 playbook을 필요로 한다. 전 단계에서 생성한 `docs-site` 디렉토리 내에 `<<demo-playbook>>` 을 생성한 뒤, 아래와 같이 입력하고 저장해보자.
+
+.antora-playbook.yml
+[#demo-playbook,yaml]
+----
+site:
+  title: Antora Docs <.>
+  url: https://elliot00jee.github.io/antora # <.>
+  start_page: component-b::index.adoc # <.>
+content:
+  sources:
+  - url: https://gitlab.com/antora/demo/demo-component-a.git # <.>
+    branches: HEAD # <.>
+  - url: https://gitlab.com/antora/demo/demo-component-b.git
+    branches: [v2.0, v1.0]
+    start_path: docs <.>
+ui: #<.>
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
+    snapshot: true
+----
+<.> 사이트의 제목으로, 상단 왼쪽에 노출된다.
+<.> 사이트의 URL을 의미한다. Optional 값이지만, 비워놓으면 URL 값을 필요로 하는 특정 기능들이 자동으로 비활성화 되므로 입력하는 것을 권장한다.
+<.> 사이트에서 시작 페이지로 사용할 페이지 정보로, 버전을 생략할 경우 `latest` 버전의 컴포넌트에서 페이지를 가져온다.
+<.> Antora가 필요한 컨텐츠들을 가져올 때 참고할 git 리포지토리 URL
+<.> 브랜치 이름(또는 패턴). `branches` 나 `tags` 값이 없을 경우에는 로컬은 현재 브랜치, 리모트는 기본 브랜치가 적용된다.
+<.> 컴포넌트의 루트 상태 경로이며, antora.yml 파일이 있는 곳이다.
+<.> Antora가 사이트를 생성하기 위해 사용하는 UI 번들. 버전이 계속 변하기 때문에, `snapshot: true` 로 설정한다.
+
+[#run-antora]
+== Antora 실행하기
+위에서 작성한 <<demo-playbook>> 이 있는 위치(`docs-site)로 이동한 뒤, 다음 명령어를 입력한다.
+
+    $ antora --fetch antora-playbook.yml
+    [fetch] https://gitlab.com/antora/demo/demo-component-a.git [#########################################################################################]
+    [fetch] https://gitlab.com/antora/demo/demo-component-b.git [#########################################################################################]
+    Site generation complete!
+    Open file:///home/elliot00jee/github/antora-test/build/site/index.html in a browser to view your site.
+
+디렉토리 구조를 확인해보면 다음과 같다.
+----
+📂 docs-site
+  📂 build
+    📂 _
+      📂 css
+      📂 font
+      📂 img
+      📂 js
+    📂 component-a
+    📂 component-b
+    📄 index.html
+    📄 404.html <.>
+    📄 sitemap-component-a.xml
+    📄 sitemap-component-b.xml
+    📄 sitemap.xml
+  📂 node_modules
+  📂 node_modules
+  📄 antora-playbook.yml
+  📄 package-lock.json
+  📄 package.json
+----
+<.> <<demo-playbook>> 에서 `site.url` 을 명시하지 않았다면, 404.html 및 sitemap 파일들은 생성되지 않는다.
+
+[IMPORTANT]
+기본적으로 Antora는 <<demo-playbook>> 에서 정의한 git 리포지토리 및 UI 번들을 캐싱한다. 해당 git 리포지토리에 변경이 있어도 캐싱된 데이터를 사용할 수 있기 때문에, Antora에 익숙해질 때 까지는 `--fetch` 옵션을 사용하여 리소스를 새로 가져올 수 있게 하는게 좋다.
+
+
+Antora를 사용해 정적 페이지가 생성되었다. `docs-site/build/site/index.html` 파일을 확인해보자.
+
+image::1.png[]
+
+다음에는 생성된 정적 사이트를 Github Action과 Github Page를 사용해서 배포해 보도록 하자.

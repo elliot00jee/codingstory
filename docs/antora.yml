@@ -1,0 +1,12 @@
+name: codingstory
+title: CodingStory
+version: latest
+display_version: default
+asciidoc:
+  attributes:
+    source-language: asciidoc@
+    xrefstyle: short@
+    listing-caption: Example@
+nav:
+  - modules/documentation/nav.adoc
+
