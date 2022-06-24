@@ -9,6 +9,12 @@
 * [x] Antora Playbook 프로젝트를 리포지토리에 업로드
 * [x] Github page 설정하기
 
+[#create-github-repository]
+== Github Repository 생성하기
+Github에서 Antora Playbook 프로젝트를 업로드할 리포지토리를 생성하자. 이때 리포지토리의 이름은 나중에 생성할 Github Page URL 경로에 포함된다.
+[CAUTION]
+리포지토리는 public 으로 생성해야 한다. private 생성하게 되면 Github Page를 설정할 때, 유료 버전으로 업그레이드 하거나 public 으로 변경하라는 문구가 나온다.
+
 [#create-github-action-workflow]
 == Github Action Workflow 설정하기
 link:{url-github-action}[Github Action]은 Github에서 제공하는 CI/CD 플랫폼이다. 리포지토리 안에서 특정 이벤트가 발생했을 때 트리거 되도록 설정할 수 있으며, 각 workflow는 한 개 이상의 job으로 구성되어있다. 각 job은 가상 머신 또는 컨테이너 내부에서 구동되며, 한 개 이상의 step을 포함하고 있다. step은 스크립트를 실행하거나, 또 다른 action을 실행할 수 있다. Github Action은 workflow를 정의하기 위해 YAML 파일을 사용하는데, `.github/workflows` 디렉토리에 저장하면 된다.
