@@ -1,4 +1,4 @@
 .Documentation
-** Antora
-*** xref:get-started.adoc[]
-*** xref:publish-to-github-pages.adoc[]
+* Antora
+** xref:get-started.adoc[]
+** xref:publish-to-github-pages.adoc[]
