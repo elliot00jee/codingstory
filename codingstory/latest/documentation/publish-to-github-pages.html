@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Github Page에 발행하기 :: mypage</title>
+    <link rel="canonical" href="https://elliot00jee.github.io/mypage/codingstory/latest/documentation/publish-to-github-pages.html">
+    <meta name="generator" content="Antora 3.0.1">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/site-extra.css">
+    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <a href="https://elliot00jee.github.io/mypage">mypage</a>
+      </div>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="codingstory" data-version="latest">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">CodingStory</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">👋 Hi, Stranger</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Antora</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="get-started.html">Antora로 페이지 생성하기</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="publish-to-github-pages.html">Github Page에 발행하기</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">CodingStory</span>
+    <span class="version">default</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">CodingStory</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">default</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">CodingStory</a></li>
+    <li>Documentation</li>
+    <li>Antora</li>
+    <li><a href="publish-to-github-pages.html">Github Page에 발행하기</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/elliot00jee/mypage/edit/main/codingstory/docs/modules/documentation/pages/publish-to-github-pages.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Github Page에 발행하기</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>개발 환경은 Ubuntu 20.04(WLS) 이고, 오늘 해볼 것들은 다음과 같다.</p>
+</div>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p><i class="fa fa-check-square-o"></i> Github 리포지토리 생성</p>
+</li>
+<li>
+<p><i class="fa fa-check-square-o"></i> Github Action Workflow 설정</p>
+</li>
+<li>
+<p><i class="fa fa-check-square-o"></i> Antora Playbook 프로젝트를 리포지토리에 업로드</p>
+</li>
+<li>
+<p><i class="fa fa-check-square-o"></i> Github page 설정하기</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="create-github-action-workflow"><a class="anchor" href="#create-github-action-workflow"></a>Github Action Workflow 설정하기</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://docs.github.com/en/actions">Github Action</a>은 Github에서 제공하는 CI/CD 플랫폼이다. 리포지토리 안에서 특정 이벤트가 발생했을 때 트리거 되도록 설정할 수 있으며, 각 workflow는 한 개 이상의 job으로 구성되어있다. 각 job은 가상 머신 또는 컨테이너 내부에서 구동되며, 한 개 이상의 step을 포함하고 있다. step은 스크립트를 실행하거나, 또 다른 action을 실행할 수 있다. Github Action은 workflow를 정의하기 위해 YAML 파일을 사용하는데, <code>.github/workflows</code> 디렉토리에 저장하면 된다.</p>
+</div>
+<div class="paragraph">
+<p><a href="get-started.html" class="xref page">Antora로 페이지 생성하기</a> 에서 생성한 <code>docs-site</code> 안에 <code>.github/workflows</code> 디렉토리를 만든 후, 다음 파일을 생성해보자.</p>
+</div>
+<div id="workflow" class="listingblock">
+<div class="title">publish.yml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">name: Publish to GitHub Pages with Lunr Search Extension
+on:
+  push:
+    branches: [main] <i class="conum" data-value="1"></i><b>(1)</b>
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2 <i class="conum" data-value="2"></i><b>(2)</b>
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16' <i class="conum" data-value="3"></i><b>(3)</b>
+    - name: Install Antora and the Antora Lunr Extension
+      run: npm i antora @antora/lunr-extension
+    - name: Generate Site
+      run: npx antora --fetch antora-playbook.yml <i class="conum" data-value="4"></i><b>(4)</b>
+    - name: Publish to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3 <i class="conum" data-value="5"></i><b>(5)</b>
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: build/site</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>main 브랜치에 <code>push</code> 이벤트가 발생하면 트리거된다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>해당 리포지토리를 현재 가상 머신 또는 컨테이너로 check-out 해온다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>antora를 설치하고 실행하기 위해 node.js LTS 버전을 설치한다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>antora를 실행해서 정적 페이지를 빌드한다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>전 단계에서 생성된 정적 페이지를 github page에 배포할 수 있도록 해주는 github action.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><a href="#workflow">publish.yml</a> 파일을 작성하고 나면 <code>docs-site</code> 리포지토리를 생성한 github 리포지토리에 업로드 한다. <code>push</code> 이벤트가 발생하면 workflow가 실행되는 걸 확인할 수 있다.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/2.png" alt="2">
+</div>
+</div>
+<div class="paragraph">
+<p><code>gh-page</code> 브랜치에 빌드된 정적 파일들이 생성되었는지 확인해보자.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/4.png" alt="4">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="setup-github-page"><a class="anchor" href="#setup-github-page"></a>Github Page 설정하기</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>현재 리포지토리의 Setting 메뉴에서 github page를 사용할 브랜치를 선택해야 한다. <a href="#create-github-action-workflow">Github Action Workflow 설정하기</a> 에서 생성된 <code>gh-page</code> 브랜치를 선택하자. 브랜치가 생성된 직후에는 save 버튼이 비활성화 되어있는 걸 보면 반영되는데 약간 걸리는 듯 하다.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/3.png" alt="3">
+</div>
+</div>
+<div class="paragraph">
+<p>Save를 누르고 나서 Actions 메뉴로 가보면 새로운 workflow가 실행되고 있는 것을 확인할 수 있다. 끝나고 나면 deploy 밑에 생성된 Github Page URL이 노출된다.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Github Page URL을 보면 <code><em>https://{userId}.github.io/{repository-name}</em></code> 으로 구성되는데, 리포지토리 별로 독립된 사이트를 만들 수 있을 것으로 보인다. 물론 Antora는 여러 리포지토리를 합쳐 하나의 사이트에서 제공할 수도 있게 해준다.
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/5.png" alt="5">
+</div>
+</div>
+<div class="paragraph">
+<p>해당 URL로 접속해보면 시작 페이지로 설정했던 문서가 노출되는 걸 확인할 수 있다.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/6.png" alt="6">
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Copyright © <a href="https://opendevise.com">OpenDevise Inc.</a> and individual contributors to <a href="https://antora.org">Antora</a>. Site deploys by <a href="https://netlify.com">Netlify</a>.</p>
+  <p>Except where otherwise noted, docs.antora.org, Antora, and the Antora UI, are licensed under the <a href="https://www.mozilla.org/en-US/MPL/2.0/">Mozilla Public License Version 2.0</a> (MPL-2.0).</p>
+  <p>AsciiDoc® is a trademark of the Eclipse Foundation, Inc.</p>
+</footer>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
