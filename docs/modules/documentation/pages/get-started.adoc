@@ -2,7 +2,7 @@
 :url-nvm: https://github.com/nvm-sh/nvm
 :listing-caption!:
 
-환경은 Ubuntu 20.04(WLS) 이고, 오늘 해볼 것들은 다음과 같다.
+개발 환경은 Ubuntu 20.04(WLS) 이고, 오늘 해볼 것들은 다음과 같다.
 
 * [x] Node.js 설치하기
 * [x] Antora 설치하기
