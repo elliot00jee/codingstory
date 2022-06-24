@@ -13,7 +13,7 @@
 == Github Action Workflow 설정하기
 link:{url-github-action}[Github Action]은 Github에서 제공하는 CI/CD 플랫폼이다. 리포지토리 안에서 특정 이벤트가 발생했을 때 트리거 되도록 설정할 수 있으며, 각 workflow는 한 개 이상의 job으로 구성되어있다. 각 job은 가상 머신 또는 컨테이너 내부에서 구동되며, 한 개 이상의 step을 포함하고 있다. step은 스크립트를 실행하거나, 또 다른 action을 실행할 수 있다. Github Action은 workflow를 정의하기 위해 YAML 파일을 사용하는데, `.github/workflows` 디렉토리에 저장하면 된다.
 
-xref:documentation:get-started.adoc [Antora로 페이지 생성하기] 에서 생성한 `docs-site` 안에 `.github/workflows` 디렉토리를 만든 후, 다음 파일을 생성해보자.
+xref:get-started.adoc[Antora로 페이지 생성하기] 에서 생성한 `docs-site` 안에 `.github/workflows` 디렉토리를 만든 후, 다음 파일을 생성해보자.
 
 .publish.yml
 [#workflow, yaml]
@@ -37,7 +37,7 @@ jobs:
     - name: Generate Site
       run: npx antora --fetch antora-playbook.yml #<.>
     - name: Publish to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v3 #<.>
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: build/site
