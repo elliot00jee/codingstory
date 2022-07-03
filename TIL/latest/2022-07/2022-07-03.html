@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Auditing :: mypage</title>
+    <link rel="canonical" href="https://elliot00jee.github.io/mypage/TIL/latest/2022-07/2022-07-03.html">
+    <meta name="generator" content="Antora 3.0.1">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/site-extra.css">
+    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <a href="https://elliot00jee.github.io/mypage">mypage</a>
+      </div>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="TIL" data-version="latest">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">TIL</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">2022-07</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="2022-07-03.html">2022-07-03</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">TIL</span>
+    <span class="version">default</span>
+  </div>
+  <ul class="components">
+    <li class="component">
+      <a class="title" href="../../../codingstory/latest/index.html">CodingStory</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../codingstory/latest/index.html">default</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component is-current">
+      <a class="title" href="../index.html">TIL</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">default</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../../codingstory/latest/index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">TIL</a></li>
+    <li>2022-07</li>
+    <li><a href="2022-07-03.html">2022-07-03</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/elliot00jee/TIL/edit/main/docs/modules/2022-07/pages/2022-07-03.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Auditing</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>모든 운영성 DB에는 생성자/수정자/생성일자/수정일자 라는 컬럼을 볼 수 있다. API 스펙에 해당 데이터들이 들어갈 때도 있지만 그런게 아니라면 보통은 운영 하다가 문제 생겼을 때 이력을 추적하기 위해서 많이 사용한다. Mybatis를 사용할 때는 쿼리에 현재 시간/현재 로그인한 사용자 등을 넣는 부분이 있었고, Spring Data를 사용하고 나서부터는 <strong>Auditing</strong> 이라는 기능을 사용하게 되었다. 영속화할 객체 필드에 <code>@CreatedBy</code>, <code>@ModifiedBy</code>, <code>@CreatedDate</code>, <code>@LastModifiedBy</code> 어노테이션을 붙이거나, 특정 인터페이스를 구현해놓으면 자동으로 값을 넣어준다. 사실 이 기능을 몰랐을 때는 객체에 현재 시간 및 현재 로그인한 사용자 정보를 넣어주는 공통 로직을 개발해놓고 썼었는데, 다른 개발자들이 어떻게 하면 더 편하게 개발할지를 고민하고 있던 차에 알게된 기능이었다. <span class="line-through">역시 발전은 게으름에서 나온다.</span></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class BaseEntity {
+    @CreatedDate
+    private LocalDateTime createdDate;
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
+    @CreatedBy
+    private String createdBy;
+    @LastModifiedBy
+    private String lastModifiedBy;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Configuration
+@EnableMongoAuditing
+public class MongoDBConfig {
+    @Bean
+    public AuditorAware&lt;String&gt; myAuditorProvider() { <i class="conum" data-value="1"></i><b>(1)</b>
+            return () -&gt; Optional.ofNullable(
+                    ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
+                            .getRequest()
+                            .getHeader("userId"));
+        }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Spring Data의 Auditing 기능 사용할 때 빈으로 등록한다.
+<div class="ulist">
+<ul>
+<li>
+<p>엔티티에 @CreatedBy, @LastModifiedBy가 붙어있으면, 생성/수정될 때 하기 규칙대로 값이 들어간다.</p>
+</li>
+<li>
+<p>&#8658; 요청 헤더의 "userId" 값</p>
+</li>
+</ul>
+</div></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>개발을 하다보면 항상 코드가 <span class="line-through">더러워</span> 복잡해지는 요구 사항이 생기게 된다. (사실 생각해보면 그건 요구 사항을 받았을 때 개발자의 마음가짐에 따라 결과가 달라는 것 같다)</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/1.png" alt="1">
+</div>
+</div>
+<div class="paragraph">
+<p>대략 위와 같은 상속 구조에서 A 클래스에 <code>lastModifiedDate</code> 필드가 있었는데, <code>A-a-c</code> 에서는 데이터가 수정될 때 현재 시간으로 들어가야 했고, <code>A-a-a</code>, <code>A-a-b</code> 는 데이터가 생성된 이후로는 업데이트가 되지 말아야했다. 방법은 여러 가지가 있을 것 같았는데,</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>해당 필드를 서브 클래스로 내려서 필요에 따라 어노테이션을 붙이고 어떤건 안 붙이거나</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>lastModifiedDate</code> 필드는 <code>A</code> 의 모든 서브클래스에서 사용하고 있는데 해당 필드를 여기저기 산재시켜서 혼란을 주고 싶지 않았다.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>AbstractAuditable</code> 인터페이스를 구현해서 <code>@LastModifiedDate</code> 의 동작을 커스터마이징할 수도 있을 것 같았다.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>어노테이션 하나만 재정의하고 싶었기 때문에, <span class="line-through">귀찮았다</span> 인터페이스를 구현해서 복잡도가 증가하는게 부담스러웠다.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><code>LastModifiedBy</code> 어노테이션을 들여다보니 메소드에도 해당 어노테이션을 붙일 수 있었다. 스프링 세터 주입처럼 사용할 수 있으면, <strong><code>lastModifiedDate</code> 필드를 그대로 <code>A</code> 클래스에 남겨놓고, <code>Setter</code> 만 재정의해서 Auditing 기능을 사용할 수 있지 않을까 싶었다.</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Retention(RetentionPolicy.RUNTIME)
+@Target(value = { FIELD, METHOD, ANNOTATION_TYPE })
+public @interface LastModifiedBy {
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class A {
+    @CreatedDate
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
+    @CreatedBy
+    private String createdBy;
+    @LastModifiedBy
+    private String lastModifiedBy;
+
+    protected void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class A-a-c extends A {
+
+    @LastModifiedDate
+    @Override
+    protected void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+        super.setLastModifiedDate(lastModifiedDate);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>예상처럼 잘 동작했다. 결과적으로 <code>A</code> 클래스에 <code>setLastModifiedDate()</code> 를 정의하고, 서브클래스에서 <code>@LastModifiedDate</code> 를 사용하고 싶을 때는 해당 메소드를 오버라이딩한 뒤 어노테이션을 붙이면 되었다.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>해당 필드의 세터 메소드에 어노테이션을 붙이면 동작하는데, 특이한 점은 파라미터로 전달되는 값을 무시하고 내부에 로직을 구현한다고 해서 그게 동작하는 건 아니라는 것. 그렇기 때문에 setter 메소드 내부에 아무것도 넣지 않아도 @LastModifiedDate 로직 대로 동작한다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">private LocalDateTime date;
+@LastModifiedDate
+public void setDate(LocalDateTime date) {}</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_디버깅하면서_알게_된_것"><a class="anchor" href="#_디버깅하면서_알게_된_것"></a>디버깅하면서 알게 된 것</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>해당 어노테이션이 어떻게 동작하는지 궁금해서 디버깅을 해봤는데, <strong>결론은 Getter/Setter 둘 다 Auditing 어노테이션이 동작한다.</strong> Getter/Setter 둘 다 마찬가지로 내부 로직을 보지는 않고, 해당 필드가 어떤 것인지만 가져와서 사용하기 때문에, 필드에 어노테이션을 붙이는 것과 동일하게 동작한다.</p>
+</div>
+<div class="listingblock">
+<div class="title">AnnotationBasedPersistentProperty.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.springframework.data.mapping.model;
+public abstract class AnnotationBasedPersistentProperty&lt;P extends PersistentProperty&lt;P&gt;&gt;
+		extends AbstractPersistentProperty&lt;P&gt; {
+
+    private final Map&lt;Class&lt;? extends Annotation&gt;, Optional&lt;? extends Annotation&gt;&gt; annotationCache = new ConcurrentHashMap&lt;&gt;();
+
+    private void populateAnnotationCache(Property property) { <i class="conum" data-value="1"></i><b>(1)</b>
+        Optionals.toStream(property.getGetter(), property.getSetter()).forEach(it -&gt; {
+            for (Annotation annotation : it.getAnnotations()) {
+                Class&lt;? extends Annotation&gt; annotationType = annotation.annotationType();
+                ...
+                annotationCache.put(annotationType,
+                        Optional.of(mergedAnnotation));
+            }
+        });
+
+        property.getField().ifPresent(it -&gt; {
+            for (Annotation annotation : it.getAnnotations()) {
+                Class&lt;? extends Annotation&gt; annotationType = annotation.annotationType();
+                Annotation mergedAnnotation = AnnotatedElementUtils.getMergedAnnotation(it, annotationType);
+                ...
+                annotationCache.put(annotationType,
+                        Optional.of(mergedAnnotation));
+            }
+        });
+    }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>getter/setter 또는 필드에 붙은 어노테이션들을 가져와서 <code>annotationCache</code> Map 에 넣는다.</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">MappingAuditableBeanWrapperFactory.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.springframework.data.auditing;
+
+public class MappingAuditableBeanWrapperFactory extends DefaultAuditableBeanWrapperFactory {
+    private final PersistentPropertyPaths&lt;?, ? extends PersistentProperty&lt;?&gt;&gt; createdByPaths;
+    private final PersistentPropertyPaths&lt;?, ? extends PersistentProperty&lt;?&gt;&gt; createdDatePaths;
+    private final PersistentPropertyPaths&lt;?, ? extends PersistentProperty&lt;?&gt;&gt; lastModifiedByPaths;
+    private final PersistentPropertyPaths&lt;?, ? extends PersistentProperty&lt;?&gt;&gt; lastModifiedDatePaths;
+
+    public &lt;P&gt; MappingAuditingMetadata(MappingContext&lt;?, ? extends PersistentProperty&lt;?&gt;&gt; context, Class&lt;?&gt; type) {
+        Assert.notNull(type, "Type must not be null!");
+
+        this.createdByPaths = findPropertyPaths(type, CreatedBy.class, context);
+        this.createdDatePaths = findPropertyPaths(type, CreatedDate.class, context);
+        this.lastModifiedByPaths = findPropertyPaths(type, LastModifiedBy.class, context);
+        this.lastModifiedDatePaths = findPropertyPaths(type, LastModifiedDate.class, context);
+        ...
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">AnnotationBasedPersistentProperty.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">private &lt;A extends Annotation&gt; Optional&lt;A&gt; doFindAnnotation(Class&lt;A&gt; annotationType) {
+    Optional&lt;? extends Annotation&gt; annotation = annotationCache.get(annotationType); <i class="conum" data-value="1"></i><b>(1)</b>
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>처음에 Property 별로 생성한 <code>annotationCache</code> Map에서 해당하는 어노테이션이 있는지 순서대로 찾은 뒤, 매칭되는게 있으면 해당 Property 객체를 반환한다.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Spring Data 프로젝트에서 getter/setter로 인식하는 것은 자바빈 컨벤션을 따르는 것 같다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class Property {
+	private Property(TypeInformation&lt;?&gt; type, Optional&lt;Field&gt; field, Optional&lt;PropertyDescriptor&gt; descriptor) {
+    ...
+    this.getter = descriptor.map(PropertyDescriptor::getReadMethod)//
+            .filter(it -&gt; getType() != null)//
+            .filter(it -&gt; getType().isAssignableFrom(type.getReturnType(it).getType()));
+
+    this.setter = descriptor.map(PropertyDescriptor::getWriteMethod)//
+            .filter(it -&gt; getType() != null)//
+            .filter(it -&gt; type.getParameterTypes(it).get(0).getType().isAssignableFrom(getType()));
+    ...</code></pre>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Copyright © <a href="https://opendevise.com">OpenDevise Inc.</a> and individual contributors to <a href="https://antora.org">Antora</a>. Site deploys by <a href="https://netlify.com">Netlify</a>.</p>
+  <p>Except where otherwise noted, docs.antora.org, Antora, and the Antora UI, are licensed under the <a href="https://www.mozilla.org/en-US/MPL/2.0/">Mozilla Public License Version 2.0</a> (MPL-2.0).</p>
+  <p>AsciiDoc® is a trademark of the Eclipse Foundation, Inc.</p>
+</footer>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
