@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>String과 StringBuilder :: mypage</title>
+    <link rel="canonical" href="https://elliot00jee.github.io/mypage/TIL/latest/2022-07/2022-07-19.html">
+    <meta name="generator" content="Antora 3.0.2">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/site-extra.css">
+    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <a href="https://elliot00jee.github.io/mypage">mypage</a>
+      </div>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="TIL" data-version="latest">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">TIL</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">2022-07</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="2022-07-03.html">2022-07-03</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="2022-07-19.html">2022-07-19</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">TIL</span>
+    <span class="version">default</span>
+  </div>
+  <ul class="components">
+    <li class="component">
+      <a class="title" href="../../../codingstory/latest/index.html">CodingStory</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../codingstory/latest/index.html">default</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component is-current">
+      <a class="title" href="../index.html">TIL</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">default</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../../codingstory/latest/index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">TIL</a></li>
+    <li>2022-07</li>
+    <li><a href="2022-07-19.html">2022-07-19</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/elliot00jee/TIL/edit/main/docs/modules/2022-07/pages/2022-07-19.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">String과 StringBuilder</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>언제 주워듣고 기억하고 있는건지는 모르겠지만, 문자열 연산이 필요할 때 String을 사용하면 성능 상 좋지 않으니, StringBuilder 또는 StringBuffer를 사용해라. 라는 걸 별 생각없이 실천해오고 있었다. 특히 쿼리문을 직접 문자열로 들고 있는 레거시 프로젝트에서는 문자열 연산이 상대적으로 대량으로 빈번하게 일어나기 때문에 자주 사용해왔다. 어제도 문자열 연산을 하게 되어서 <span class="line-through">아무 생각없이</span> 평소처럼 StringBuilder를 사용했는데, 인텔리제이에서 다음과 같은 사실을 알려주었다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class StringTest {
+    public static void main(String[] args) {
+        StringBuilder result01 = new StringBuilder();
+        result01.append("안녕하세요");
+        result01.append("저는 게으른 개발자입니다.");
+        result01.append("오늘도 날이 참 덥군요.");
+        result01.append("이럴 때 재택 근무를 하게 해준 회사에 정말 감사합니다.");
+        result01.append("열심히 일하겠습니다.");
+    }
+}</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>'StringBuilder result01' can be replaced with 'String'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>잉? &#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>String으로 문자열 연산을 하게 되면, 값이 더해질 때마다 새로운 객체가 생성되고, 이전의 문자열 객체는 쓰레기가 되면서 GC가 쓸데없이일어나고.. 이런거 아니었나.</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>The Java language provides special support for the string concatenation operator ( + ), and for conversion of other objects to strings. String concatenation is implemented through the StringBuilder(or StringBuffer) class and its append method. String conversions are implemented through the method toString, defined by Object and inherited by all classes in Java.</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Java 1.8 기준으로 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html">문서</a>를 확인해보면, String의 <code>+</code> 연산이 발생할 경우, 내부적으로 <code>StringBuilder</code> 또는 <code>StringBuffer</code> 와 <code>append</code> 메소드를 통해 구현된다고 한다. 찾아보니 JDK 1.5 버전부터 <code>StringBuilder</code> 가 도입되면서 생긴 기능이라고 하는데&#8230;&#8203; 나는 거의 JDK 1.8 으로 개발을 시작했는데 왜 이렇게 대충 알고 있는게 많은 건지 반성한다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class StringBuilderTest {
+    public static void main(String[] args) {
+        String result01 =
+                "안녕하세요" +
+                "저는 게으른 개발자입니다." +
+                "오늘도 날이 참 덥군요." +
+                "이럴 때 재택 근무를 하게 해준 회사에 정말 감사합니다." +
+                "열심히 일하겠습니다.";
+
+        System.out.println(result01);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>인텔리제이가 추천한대로 코드를 수정하면 String <code>+</code> 연산을 사용한다. 사실 <code>StringBuilder</code> 를 사용하면서도 참 가독성이 떨어진다고 생각했는데 String <code>+</code> 연산으로 수정하고 나니 코드도 간결해지고 좋은 것 같다.</p>
+</div>
+<div class="paragraph">
+<p>그런데, String에 값을 초기화할 때 발생하는 문자열은 컴파일러가 내부적으로 <code>StringBuilder</code> 를 생성해서 처리해주는 건 알겠는데, 기존에 값이 있는 String에 <code>+</code> 연산을 하게 되면 어떻게 되려나?</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_더_공부해봐야_할_것"><a class="anchor" href="#_더_공부해봐야_할_것"></a>더 공부해봐야 할 것</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>나는 아무래도 <code>String</code> 과 <code>StringBuilder</code>, <code>StringBuffer</code> 에 대해 잘 모르는 것 같다.</p>
+</li>
+<li>
+<p>컴파일러가 모든 경우를 커버해주는 건 아닌 것 같다. 경우에 따라 <code>StringBuilder</code> 객체를 매번 생성하는 식으로 구현이 되기도 한다고 한다.</p>
+</li>
+<li>
+<p>난 JDK 8을 주로 사용하고 있지만, JDK 9 이상부터는 단순히 <code>StringBuilder</code> 와 <code>append</code> 메소드로 동작하는게 아니라 다른 방식을 사용한다고 한다.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Copyright © <a href="https://opendevise.com">OpenDevise Inc.</a> and individual contributors to <a href="https://antora.org">Antora</a>. Site deploys by <a href="https://netlify.com">Netlify</a>.</p>
+  <p>Except where otherwise noted, docs.antora.org, Antora, and the Antora UI, are licensed under the <a href="https://www.mozilla.org/en-US/MPL/2.0/">Mozilla Public License Version 2.0</a> (MPL-2.0).</p>
+  <p>AsciiDoc® is a trademark of the Eclipse Foundation, Inc.</p>
+</footer>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
