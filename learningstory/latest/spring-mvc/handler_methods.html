@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>@RequestMapping과 핸들러 메소드 :: mypage</title>
+    <link rel="canonical" href="https://elliot00jee.github.io/mypage/learningstory/latest/spring-mvc/handler_methods.html">
+    <meta name="generator" content="Antora 3.1.1">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/site-extra.css">
+    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <a href="https://elliot00jee.github.io/mypage">mypage</a>
+      </div>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="learningstory" data-version="latest">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">learningstory</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Spring MVC</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="DispatcherServlet.html">DispatcherServlet</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">자바의 기본</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../java-basic/variable.html">변수</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../java-basic/enum.html">Enum</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">learningstory</span>
+    <span class="version">default</span>
+  </div>
+  <ul class="components">
+    <li class="component">
+      <a class="title" href="../../../codingstory/latest/index.html">CodingStory</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../codingstory/latest/index.html">default</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component is-current">
+      <a class="title" href="../index.html">learningstory</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">default</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../TIL/latest/index.html">TIL</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../TIL/latest/index.html">default</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../../codingstory/latest/index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">learningstory</a></li>
+    <li><a href="handler_methods.html">@RequestMapping과 핸들러 메소드</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/elliot00jee/mypage/edit/main/learningstory/docs/modules/spring-mvc/pages/handler_methods.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">@RequestMapping과 핸들러 메소드</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring MVC에서 말하는 어노테이션 기반의 핸들러 메소드란, 간단하게 말하면 어노테이션 기반의 컨트롤러에서 <code>@RequestMapping</code> 이 붙은 메소드들을 말한다.
+<code>DispatcherServlet</code> 에 요청이 들어왔을 때, 해당 요청과 매핑되는 핸들러에 대한 정보를 담고 있는 <code>HandlerMapping</code> 들 중에, <code>RequestMappingHandlerMapping</code> 은 <code>@RequestMapping</code> 어노테이션을 사용하는 컨트롤러에 대한 매핑 정보를 처리한다. 이 매핑 정보를 초기화할 때, 등록된 빈들 중 핸들러로 판단되는 빈에서 <code>@RequestMapping</code> 어노테이션이 붙은 메소드들을 <code>HandlerMethod</code> 객체로 만들어서 등록하게 된다.</p>
+</div>
+<div class="listingblock">
+<div class="title">AbstractHandlerMethodMapping.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">protected void processCandidateBean(String beanName) {
+        Class&lt;?&gt; beanType = null;
+
+        try {
+            beanType = this.obtainApplicationContext().getType(beanName);
+        } catch (Throwable var4) {
+            if (this.logger.isTraceEnabled()) {
+                this.logger.trace("Could not resolve type for bean '" + beanName + "'", var4);
+            }
+        }
+
+        if (beanType != null &amp;&amp; this.isHandler(beanType)) {
+            this.detectHandlerMethods(beanName);
+        }
+
+    }</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">RequestMappingHandlerMapping.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">protected boolean isHandler(Class&lt;?&gt; beanType) { <i class="conum" data-value="1"></i><b>(1)</b>
+    return AnnotatedElementUtils.hasAnnotation(beanType, Controller.class) || AnnotatedElementUtils.hasAnnotation(beanType, RequestMapping.class);
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>@Controller</code> 또는 <code>@RequestMapping</code> 이 붙은 빈들을 핸들러라고 판단한다. 그래서 해당 클래스에 <code>@RequestMapping</code> 이 붙어있다면 <code>@Controller</code> 가 아니라 <code>@Component</code> 를 붙여주어도 요청 매핑이 되긴 하지만 명시적으로 컨트롤러임을 나타내기 위해 붙여준다.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_method_arguments"><a class="anchor" href="#_method_arguments"></a>Method Arguments</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>애노테이션 기반 컨트롤러를 처리하는 <code>RequestMappingHandlerAdaptor</code> 는 요청 정보 또는 요청에 들어있는 정보들을 받아오기 위해서 여러 핸들러 메소드 아큐먼트들을 사용할 수 있는데, <code>HandlerMethodArgumentResolver</code> 를 호출해서 컨트롤러(핸들러)가 필요로 하는 다양한 파라미터의 값 또는 객체를 생성 한 뒤, 파라미터의 값이 모두 준비되면 컨트롤러를 호출하면서 값을 넘겨준다. 스프링 MVC이 기본적으로 제공하는 <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-arguments">메소드 아규먼트</a>들이 있고, 원한다면 인터페이스를 확장해서 커스텀하게 만들 수도 있다.</p>
+</div>
+<div class="sect2">
+<h3 id="_argumentresolver_동작_원리"><a class="anchor" href="#_argumentresolver_동작_원리"></a>ArgumentResolver 동작 원리</h3>
+<div class="listingblock">
+<div class="title">InvocableHandlerMethod.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public Object invokeForRequest(NativeWebRequest request, @Nullable ModelAndViewContainer mavContainer, Object... providedArgs) throws Exception {
+    <i class="conum" data-value="1"></i><b>(1)</b>
+    Object[] args = this.getMethodArgumentValues(request, mavContainer, providedArgs); <i class="conum" data-value="2"></i><b>(2)</b>
+    if (logger.isTraceEnabled()) {
+        logger.trace("Arguments: " + Arrays.toString(args));
+    }
+
+    return this.doInvoke(args); <i class="conum" data-value="3"></i><b>(3)</b>
+}
+protected Object[] getMethodArgumentValues(NativeWebRequest request, @Nullable ModelAndViewContainer mavContainer, Object... providedArgs) throws Exception {
+        MethodParameter[] parameters = this.getMethodParameters();
+        if (ObjectUtils.isEmpty(parameters)) {
+            return EMPTY_ARGS;
+        } else {
+            Object[] args = new Object[parameters.length];
+
+            for(int i = 0; i &lt; parameters.length; ++i) {
+                MethodParameter parameter = parameters[i];
+                parameter.initParameterNameDiscovery(this.parameterNameDiscoverer);
+                args[i] = findProvidedArgument(parameter, providedArgs);
+                if (args[i] == null) {
+                    <i class="conum" data-value="4"></i><b>(4)</b>
+                    if (!this.resolvers.supportsParameter(parameter)) {
+                        throw new IllegalStateException(formatArgumentError(parameter, "No suitable resolver"));
+                    }
+
+                    try {
+                        <i class="conum" data-value="5"></i><b>(5)</b>
+                        args[i] = this.resolvers.resolveArgument(parameter, mavContainer, request, this.dataBinderFactory);
+                    ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>RequestMappingHandlerAdapter</code> 에서 호출된다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>현재 요청에서 사용된 Method Argument 와 매핑된 파라미터 값들을 가져오기 위한 메소드를 호출한다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>준비된 파라미터 값들을 넘기면서 현재 요청을 처리할 핸들러를 호출한다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>메소드 파라미터들을 반복문을 돌면서 처리하게 되는데, 등록된 <code>ArgumentResolver</code> 를 루프 돌면서 해당 파라미터를 지원하는지 체크한다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>지원하는 <code>ArgumentResolver</code> 를 찾게 되면 실제로 값을 파라미터와 매핑하는 메소드를 호출한다.(직접적인 처리는 <code>HandlerMethodArgumentResolverComposite</code> 에서 수행된다.)</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">HandlerMethodArgumentResolverComposite.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public boolean supportsParameter(MethodParameter parameter) {
+    return this.getArgumentResolver(parameter) != null;
+}
+
+@Nullable
+public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer, NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
+    HandlerMethodArgumentResolver resolver = this.getArgumentResolver(parameter);
+    if (resolver == null) {
+        throw new IllegalArgumentException("Unsupported parameter type [" + parameter.getParameterType().getName() + "]. supportsParameter should be called first.");
+    } else {
+        return resolver.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
+    }
+}
+
+@Nullable
+private HandlerMethodArgumentResolver getArgumentResolver(MethodParameter parameter) {
+    <i class="conum" data-value="1"></i><b>(1)</b>
+    HandlerMethodArgumentResolver result = (HandlerMethodArgumentResolver)this.argumentResolverCache.get(parameter);
+    if (result == null) {
+        Iterator var3 = this.argumentResolvers.iterator();
+
+        while(var3.hasNext()) {
+            HandlerMethodArgumentResolver resolver = (HandlerMethodArgumentResolver)var3.next();
+            if (resolver.supportsParameter(parameter)) {
+                result = resolver;
+                this.argumentResolverCache.put(parameter, resolver);
+                break;
+            }
+        }
+    }
+
+    return result;
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>MethodParameter</code> 를 지원하는 <code>ArgumentResolver</code> 를 찾기 위해, 매번 등록된 <code>ArgumentResolver</code> 들의 <code>supportParameter</code> 메소드를 호출하는게 아니라, <code>Map&lt;MethodParameter, HandlerMethodArgumentResolver&gt; argumentResolverCache</code> 에 넣어놓고 캐싱한다.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_requestbody_responsebody_와_httpmessageconverter"><a class="anchor" href="#_requestbody_responsebody_와_httpmessageconverter"></a>@RequestBody, @ResponseBody 와 HttpMessageConverter</h3>
+<div class="sect3">
+<h4 id="_requestbody"><a class="anchor" href="#_requestbody"></a>@RequestBody</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@RequestBody</code> 를 사용하면 HTTP 메시지 바디 정보를 편리하게 조회할 수 있다.</p>
+</li>
+<li>
+<p><code>HttpEntity</code>, <code>@RequestBody</code> 를 사용하면 HTTP 메시지 컨버터가 HTTP 메시지 바디의 내용을 우리가 원하는 문자나 객체 등으로 변환해준다.</p>
+</li>
+<li>
+<p><code>@ModelAttribute</code> 나 <code>@RequestParam</code> 과 달리 <code>@RequestBody</code> 는 생략할 수 없다.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_responsebody"><a class="anchor" href="#_responsebody"></a>@ResponseBody</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@ResponseBody</code> 를 사용하면 응답 결과를 HTTP 메시지 바디에 직접 담아서 전달할 수 있다.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_httpentity"><a class="anchor" href="#_httpentity"></a>HttpEntity</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>HTTP 헤더, 본문 정보를 편리하게 조회할 수 있으며, 요청과 응답에 모두 쓸 수 있다.</p>
+</li>
+<li>
+<p><code>HttpEntity</code> 를 상속받은 객체들도 있는데 부가 기능들을 추가로 제공한다.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">RequestEntity.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class RequestEntity&lt;T&gt; extends HttpEntity&lt;T&gt; { <i class="conum" data-value="1"></i><b>(1)</b>
+    @Nullable
+    private final HttpMethod method;
+    @Nullable
+    private final URI url;
+    @Nullable
+    private final Type type;
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>HttpMethod, url 및 타입 정보들이 추가로 제공된다.</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">ResponseEntity.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class ResponseEntity&lt;T&gt; extends HttpEntity&lt;T&gt; { <i class="conum" data-value="1"></i><b>(1)</b>
+    private final Object status;
+
+    public ResponseEntity(HttpStatus status) {
+        this((Object)null, (MultiValueMap)null, (HttpStatus)status);
+    }
+
+    public ResponseEntity(@Nullable T body, HttpStatus status) {
+        this(body, (MultiValueMap)null, (HttpStatus)status);
+    }
+
+    public ResponseEntity(MultiValueMap&lt;String, String&gt; headers, HttpStatus status) {
+        this((Object)null, headers, (HttpStatus)status);
+    }
+
+    public ResponseEntity(@Nullable T body, @Nullable MultiValueMap&lt;String, String&gt; headers, HttpStatus status) {
+        this(body, headers, (Object)status);
+    }
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>HTTP 상태코드, 응답 본문, 헤더 등을 추가로 설정할 수 있다.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_httpmessageconverter"><a class="anchor" href="#_httpmessageconverter"></a>HttpMessageConverter</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>요청 본문에서 메시지를 읽어들이거나(@RequestBody), 응답 본문에 메시지를 작성할 때(@ResponseBody) 사용한다.</p>
+</li>
+<li>
+<p>스프링 부트를 사용하는 경우, <code>spring-boot-starter-web</code> 의존성이 있다면 JacksonJSON 2가 의존성에 들어간다. 즉, JSON용 HTTP 메시지 컨버터가 기본으로 등록 되게 된다.
+<span class="image"><img src="_images/3.png" alt="3"></span></p>
+</li>
+<li>
+<p>메시지 컨버터를 추가하여 사용하고 싶은 경우에는 <a href="spring_mvc_settings.html" class="xref page">Spring MVC 설정</a> 에서 본 것처럼 설정할 수 있다.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">WebConfig.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Configuration
+public class WebConfig implements WebMvcConfigurer {
+    @Override
+    public void extendMessageConverters(List&lt;HttpMessageConverter&lt;?&gt;&gt; converters) {
+    <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+
+    @Override
+    public void configureMessageConverters(List&lt;HttpMessageConverter&lt;?&gt;&gt; converters) {
+    <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>메시지 컨버터에 추가</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>기본 메시지 컨버터 대체</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">WebMvcConfigurationSupport.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">protected final List&lt;HttpMessageConverter&lt;?&gt;&gt; getMessageConverters() {
+    if (this.messageConverters == null) {
+        this.messageConverters = new ArrayList();
+        this.configureMessageConverters(this.messageConverters);
+        if (this.messageConverters.isEmpty()) {
+            this.addDefaultHttpMessageConverters(this.messageConverters);
+        }
+
+        this.extendMessageConverters(this.messageConverters);
+    }
+
+    return this.messageConverters;
+}
+
+protected void configureMessageConverters(List&lt;HttpMessageConverter&lt;?&gt;&gt; converters) {
+}
+
+protected void extendMessageConverters(List&lt;HttpMessageConverter&lt;?&gt;&gt; converters) {
+}
+
+protected final void addDefaultHttpMessageConverters(List&lt;HttpMessageConverter&lt;?&gt;&gt; messageConverters) {
+    messageConverters.add(new ByteArrayHttpMessageConverter());
+    messageConverters.add(new StringHttpMessageConverter());
+    messageConverters.add(new ResourceHttpMessageConverter());
+    messageConverters.add(new ResourceRegionHttpMessageConverter());
+    ...
+    if (jackson2Present) {
+        builder = Jackson2ObjectMapperBuilder.json();
+        if (this.applicationContext != null) {
+            builder.applicationContext(this.applicationContext);
+        }
+
+        messageConverters.add(new MappingJackson2HttpMessageConverter(builder.build())); <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>의존성에 jackson이 포함되어 있다면, 자동으로 <code>MappingJackson2HttpMessageConverter</code> 를 메시지 컨버터에 추가해준다.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requestbody_동작원리"><a class="anchor" href="#_requestbody_동작원리"></a><code>@RequestBody</code> 동작원리</h4>
+<div class="listingblock">
+<div class="title">RequestResponseBodyMethodProcessor.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class RequestResponseBodyMethodProcessor extends AbstractMessageConverterMethodProcessor {
+    public boolean supportsParameter(MethodParameter parameter) {
+        <i class="conum" data-value="1"></i><b>(1)</b>
+        return parameter.hasParameterAnnotation(RequestBody.class);
+    }
+
+    public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer, NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
+        parameter = parameter.nestedIfOptional();
+        Object arg = this.readWithMessageConverters(webRequest, parameter, parameter.getNestedGenericParameterType());
+        ....</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>@RequestBody</code> 메소드 아규먼트를 처리할 수 있는 <code>HandlerMethodArgumentResolver</code> 는 <code>RequestResponseBodyMethodProcessor</code> 이다.</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">AbstractMessageConverterMethodArgumentResolver.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public abstract class AbstractMessageConverterMethodArgumentResolver implements HandlerMethodArgumentResolver {
+    protected &lt;T&gt; Object readWithMessageConverters(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType) throws IOException, HttpMediaTypeNotSupportedException, HttpMessageNotReadableException {
+
+        try {
+            message = new EmptyBodyCheckingHttpInputMessage(inputMessage);
+            Iterator var11 = this.messageConverters.iterator();
+
+            while(var11.hasNext()) {
+                HttpMessageConverter&lt;?&gt; converter = (HttpMessageConverter)var11.next();
+                Class&lt;HttpMessageConverter&lt;?&gt;&gt; converterType = converter.getClass();
+                GenericHttpMessageConverter&lt;?&gt; genericConverter = converter instanceof GenericHttpMessageConverter ? (GenericHttpMessageConverter)converter : null;
+
+                <i class="conum" data-value="1"></i><b>(1)</b>
+                if (genericConverter != null) {
+                    if (!genericConverter.canRead(targetType, contextClass, contentType)) {
+                        continue;
+                    }
+                } else if (targetClass == null || !converter.canRead(targetClass, contentType)) {
+                    continue;
+                }
+
+                <i class="conum" data-value="2"></i><b>(2)</b>
+                if (message.hasBody()) {
+                    HttpInputMessage msgToUse = this.getAdvice().beforeBodyRead(message, parameter, targetType, converterType);
+                    body = genericConverter != null ? genericConverter.read(targetType, contextClass, msgToUse) : converter.read(targetClass, msgToUse);
+                    body = this.getAdvice().afterBodyRead(body, msgToUse, parameter, targetType, converterType);
+                } else {
+                    body = this.getAdvice().handleEmptyBody((Object)null, message, parameter, targetType, converterType);
+                }
+                break;
+            }
+        }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>등록된 <code>HttpMessageConverter</code> 들을 돌면서 해당 컨버터가 메시지를 읽을 수 있는지 체크한다.
+<div class="ulist">
+<ul>
+<li>
+<p>대상 클래스 타입을 지원하는지 그리고, HTTP 요청의 Content-Type(미디어타입)을 지원하는지</p>
+</li>
+</ul>
+</div></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>canRead()</code> 조건을 만족하면 <code>read()</code> 를 호출해서 객체 생성하고, 반환한다.</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">HttpMessageConverter.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface HttpMessageConverter&lt;T&gt; {
+    boolean canRead(Class&lt;?&gt; clazz, @Nullable MediaType mediaType);
+
+    boolean canWrite(Class&lt;?&gt; clazz, @Nullable MediaType mediaType);
+
+    List&lt;MediaType&gt; getSupportedMediaTypes();
+
+    default List&lt;MediaType&gt; getSupportedMediaTypes(Class&lt;?&gt; clazz) {
+        return !this.canRead(clazz, (MediaType)null) &amp;&amp; !this.canWrite(clazz, (MediaType)null) ? Collections.emptyList() : this.getSupportedMediaTypes();
+    }
+
+    T read(Class&lt;? extends T&gt; clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException;
+
+    void write(T t, @Nullable MediaType contentType, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException;
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Copyright © <a href="https://opendevise.com">OpenDevise Inc.</a> and individual contributors to <a href="https://antora.org">Antora</a>. Site deploys by <a href="https://netlify.com">Netlify</a>.</p>
+  <p>Except where otherwise noted, docs.antora.org, Antora, and the Antora UI, are licensed under the <a href="https://www.mozilla.org/en-US/MPL/2.0/">Mozilla Public License Version 2.0</a> (MPL-2.0).</p>
+  <p>AsciiDoc® is a trademark of the Eclipse Foundation, Inc.</p>
+</footer>
+<script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

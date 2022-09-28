@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>열거형(Enum) :: mypage</title>
+    <link rel="canonical" href="https://elliot00jee.github.io/mypage/learningstory/latest/java-basic/enum.html">
+    <meta name="generator" content="Antora 3.1.1">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/site-extra.css">
+    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <a href="https://elliot00jee.github.io/mypage">mypage</a>
+      </div>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="learningstory" data-version="latest">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">learningstory</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Spring MVC</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../spring-mvc/DispatcherServlet.html">DispatcherServlet</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">자바의 기본</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="variable.html">변수</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="enum.html">Enum</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">learningstory</span>
+    <span class="version">default</span>
+  </div>
+  <ul class="components">
+    <li class="component">
+      <a class="title" href="../../../codingstory/latest/index.html">CodingStory</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../codingstory/latest/index.html">default</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component is-current">
+      <a class="title" href="../index.html">learningstory</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">default</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../TIL/latest/index.html">TIL</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../TIL/latest/index.html">default</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../../codingstory/latest/index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">learningstory</a></li>
+    <li>자바의 기본</li>
+    <li><a href="enum.html">Enum</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/elliot00jee/mypage/edit/main/learningstory/docs/modules/java-basic/pages/enum.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">열거형(Enum)</h1>
+<div class="sect1">
+<h2 id="_정수_열거_패턴의_문제점"><a class="anchor" href="#_정수_열거_패턴의_문제점"></a>정수 열거 패턴의 문제점</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>예전에는 프로그램에서 상수를 관리하기 위해 *정수 열거 패턴*을 사용하곤 했었는데, 여기에는 여러 가지 문제점이 있다.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>타입 안전을 보장하지 않는다.</p>
+</li>
+<li>
+<p>그룹화가 어렵다.</p>
+</li>
+<li>
+<p>컴파일할 때 상수 값 자체가 클라이언트 파일에 그대로 들어가기 때문에 상수의 값이 바뀌게 되면 다시 컴파일 해야 한다.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// 주문 상태 코드
+public static final int ORDER_STATUS_REQUESTED = 0;
+public static final int ORDER_STATUS_ACCEPTED = 1;
+public static final int ORDER_STATUS_SHIPPING = 2;
+public static final int ORDER_STATUS_COMPLETED = 3;
+// 배송 상태 코드
+public static final int DELIVERY_STATUS_PREPARING = 0;
+public static final int DELIVERY_STATUS_SHIPPING = 1;
+public static final int DELIVERY_STATUS_COMPLETED = 2;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>주문과 배송의 상태를 표현하기 위해 <code>public static final int</code> 를 사용해서 상수들을 나열한 것이다.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>타입 안전을 보장하지 않는다.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>주문 상태 코드의 값을 넣을 변수, <code>int orderStatus</code> 가 있다고 할 때, 여기에 위에서 정의한 값만 들어갈 것이라고 보장할 수 있을까? 주문 상태 코드를 받을 수 있는 변수는 그저 <code>int</code> 일 뿐이기 때문에 <code>int</code> 에 들어갈 수 있는 모든 값을 받을 수 있다. 어딘가에서는 유효성을 체크하는 로직이 들어가야 한다.</p>
+</li>
+<li>
+<p>주문 상태 코드와 배송 상태 코드는 코드 값은 동일할 수 있지만 분류는 다르다. 실수로 다른 코드 분류 체계 간의 비교를 하게 된다고 해서 컴파일 시점에 알 수 있을까? <code>if(orderStatus == DELIVERY_STATUS_PREPARED)</code> 라고 했을 때,  접두어를 사용하는 등 추가적인 유효성 체크가 필요하게 된다.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public void setOrderStatus(int code) { <i class="conum" data-value="1"></i><b>(1)</b>
+    if (validOrderStatusCode(code)) {
+        this.orderStatus = code;
+    } else {
+        throw new IllegalArgumentException();
+    }
+}
+
+public boolean validOrderStatusCode(int code) { <i class="conum" data-value="2"></i><b>(2)</b>
+    return code == ORDER_STATUS_REQUESTED || code == ORDER_STATUS_ACCEPTED || code == ORDER_STATUS_SHIPPING || code == ORDER_STATUS_COMPLETED;
+}
+
+public boolean isOrderCompleted(int code) {
+    return code == DELIVERY_STATUS_COMPLETED; <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>code에는 모든 <code>int</code> 값이 들어올 수 있다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>유효한 상태 코드값이 들어왔는지 체크하는 로직이 필요하다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>주문 완료 상태인지를 체크하기 위한 로직이지만 <code>ORDER_STATUS_COMPLETED</code> 가 아닌 <code>DELIVERY_STATUS_COMPLETED</code> 와 비교했다고 해서 컴파일 에러 발생하지 않는다.</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>그룹화가 어렵다.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>관련된 상수 그룹임을 표시하기 위해 접두어를 사용하는 등의 다른 방법이 필요하다. 하지만 해당 그룹에 포함된 상수들을 나열한다든지 등의 기능을 쉽게 구현할 수 없다. 주문 상태 코드를 모두 나열해야 한다고 할 때, 알 수 있는 것은 해당 상수명은 <code>ORDER_</code> 로 시작한다는 것 뿐이다. 그룹 별로 클래스를 만들어서 <code>reflection</code> 을 사용해 변수들을 전부 가져올 수도 있겠지만 여전히 쉬운 것 같진 않다.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_enum의_정의와_사용법"><a class="anchor" href="#_enum의_정의와_사용법"></a>Enum의 정의와 사용법</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>열거형은 서로 관련된 상수를 편리하게 선언하기 위한 것으로 JDK 1.5 부터 지원되는 기능이다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public enum OrderStatus { <i class="conum" data-value="1"></i><b>(1)</b>
+    REQUESTED, ACCEPTED, SHIPPING, COMPLETED <i class="conum" data-value="2"></i><b>(2)</b>
+}
+public enum DeliveryStatus {
+    PREPARING, SHIPPING, COMPLETED
+}
+
+public boolean isOrderCompleted(OrderStatus code) { <i class="conum" data-value="3"></i><b>(3)</b>
+    return code == OrderStatus.COMPLETED;
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>열거형 이름으로 그룹명이라고 할 수 있다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>열거형 상수명</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>열거형이름.상수명</code> 으로 사용할 수 있다.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>자바의 열거형은 다음과 같은 장점을 가진다.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>컴파일 타임의 타입 안전성을 제공한다.</p>
+</li>
+<li>
+<p>그룹화에 관련된 여러 가지 기능을 제공한다.</p>
+</li>
+<li>
+<p>정수 열거 패턴에서 사용되는 <code>int</code> 와는 다르게 참조 형태로 사용되기 때문에 필드명이 변경되는게 아니라면 다시 컴파일하지 않아도 된다.</p>
+</li>
+<li>
+<p>얼거형 상수 간에는 <code>==</code> 를 사용해서 비교한다. JVM 레벨에서 유일함이 보장되기 때문에 <code>equal</code> 메소드를 사용할 필요 없다.</p>
+</li>
+<li>
+<p><strong>단순하게는 상수 그룹일 뿐이지만, 실제로는 클래스처럼 생성자, 메소드, 필드를 가질 수 있고 상수 별로 다른 동작을 하는 등 자바의 클래스가 제공하는 이점들을 가질 수 있다.</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public void setOrderStatus(OrderStatus code) {
+    this.orderStatus = code; <i class="conum" data-value="1"></i><b>(1)</b>
+}
+
+public boolean isOrderCompleted(int code) {
+    return code == DELIVERY_STATUS_COMPLETED; <i class="conum" data-value="2"></i><b>(2)</b>
+}
+
+public void</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>setOrderStatus</code> 메소드를 호출할 때 넘기는 <code>code</code> 파라미터에 값이 들어갈 때 <code>OrderStatus</code> 타입에 해당하는 값만 들어갈 수 있다. 타입이 다르면 컴파일 에러 발생한다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>열거형 상수 간에는 <code>==</code> 를 사용해서 비교할 수 있다.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_enum은_사실상_클래스"><a class="anchor" href="#_enum은_사실상_클래스"></a>enum은 사실상 클래스</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>위에서 생성한 enum을 컴파일해서 바이트코드를 열어보자.</p>
+</div>
+<div id="OrderStatus" class="listingblock">
+<div class="title">OrderStatus.class</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-class hljs" data-lang="class">// class version 52.0 (52)
+// access flags 0x4031
+// signature Ljava/lang/Enum&lt;Lorg/enumeration/OrderStatus;&gt;;
+// declaration: org/enumeration/OrderStatus extends java.lang.Enum&lt;org.enumeration.OrderStatus&gt;
+public final enum org/enumeration/OrderStatus extends java/lang/Enum { <i class="conum" data-value="1"></i><b>(1)</b>
+
+  // compiled from: OrderStatus.java
+
+  // access flags 0x4019
+  public final static enum Lorg/enumeration/OrderStatus; REQUESTED <i class="conum" data-value="2"></i><b>(2)</b>
+
+  // access flags 0x4019
+  public final static enum Lorg/enumeration/OrderStatus; ACCEPTED
+
+  // access flags 0x4019
+  public final static enum Lorg/enumeration/OrderStatus; SHIPPING
+
+  // access flags 0x4019
+  public final static enum Lorg/enumeration/OrderStatus; COMPLETED
+
+  // access flags 0x101A
+  private final static synthetic [Lorg/enumeration/OrderStatus; $VALUES
+
+  <i class="conum" data-value="3"></i><b>(3)</b>
+  // access flags 0x9
+  public static values()[Lorg/enumeration/OrderStatus;
+   L0
+    LINENUMBER 3 L0
+    GETSTATIC org/enumeration/OrderStatus.$VALUES : [Lorg/enumeration/OrderStatus;
+    INVOKEVIRTUAL [Lorg/enumeration/OrderStatus;.clone ()Ljava/lang/Object;
+    CHECKCAST [Lorg/enumeration/OrderStatus;
+    ARETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+
+  // access flags 0x9
+  public static valueOf(Ljava/lang/String;)Lorg/enumeration/OrderStatus;
+   L0
+    LINENUMBER 3 L0
+    LDC Lorg/enumeration/OrderStatus;.class
+    ALOAD 0
+    INVOKESTATIC java/lang/Enum.valueOf (Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Enum;
+    CHECKCAST org/enumeration/OrderStatus
+    ARETURN
+   L1
+    LOCALVARIABLE name Ljava/lang/String; L0 L1 0
+    MAXSTACK = 2
+    MAXLOCALS = 1
+
+  // access flags 0x2
+  // signature ()V
+  // declaration: void &lt;init&gt;()
+  private &lt;init&gt;(Ljava/lang/String;I)V <i class="conum" data-value="4"></i><b>(4)</b>
+   L0
+    LINENUMBER 3 L0
+    ALOAD 0
+    ALOAD 1
+    ILOAD 2
+    INVOKESPECIAL java/lang/Enum.&lt;init&gt; (Ljava/lang/String;I)V
+    RETURN
+   L1
+    LOCALVARIABLE this Lorg/enumeration/OrderStatus; L0 L1 0
+    MAXSTACK = 3
+    MAXLOCALS = 3
+
+  // access flags 0x8
+  static &lt;clinit&gt;()V
+   L0
+    LINENUMBER 4 L0
+    NEW org/enumeration/OrderStatus
+    DUP
+    LDC "REQUESTED"
+    ICONST_0
+    INVOKESPECIAL org/enumeration/OrderStatus.&lt;init&gt; (Ljava/lang/String;I)V
+    PUTSTATIC org/enumeration/OrderStatus.REQUESTED : Lorg/enumeration/OrderStatus;
+    NEW org/enumeration/OrderStatus
+    DUP
+    LDC "ACCEPTED"
+    ICONST_1
+    INVOKESPECIAL org/enumeration/OrderStatus.&lt;init&gt; (Ljava/lang/String;I)V
+    PUTSTATIC org/enumeration/OrderStatus.ACCEPTED : Lorg/enumeration/OrderStatus;
+    NEW org/enumeration/OrderStatus
+    DUP
+    LDC "SHIPPING"
+    ICONST_2
+    INVOKESPECIAL org/enumeration/OrderStatus.&lt;init&gt; (Ljava/lang/String;I)V
+    PUTSTATIC org/enumeration/OrderStatus.SHIPPING : Lorg/enumeration/OrderStatus;
+    NEW org/enumeration/OrderStatus
+    DUP
+    LDC "COMPLETED"
+    ICONST_3
+    INVOKESPECIAL org/enumeration/OrderStatus.&lt;init&gt; (Ljava/lang/String;I)V
+    PUTSTATIC org/enumeration/OrderStatus.COMPLETED : Lorg/enumeration/OrderStatus;
+   L1
+    LINENUMBER 3 L1
+    ICONST_4
+    ANEWARRAY org/enumeration/OrderStatus
+    DUP
+    ICONST_0
+    GETSTATIC org/enumeration/OrderStatus.REQUESTED : Lorg/enumeration/OrderStatus;
+    AASTORE
+    DUP
+    ICONST_1
+    GETSTATIC org/enumeration/OrderStatus.ACCEPTED : Lorg/enumeration/OrderStatus;
+    AASTORE
+    DUP
+    ICONST_2
+    GETSTATIC org/enumeration/OrderStatus.SHIPPING : Lorg/enumeration/OrderStatus;
+    AASTORE
+    DUP
+    ICONST_3
+    GETSTATIC org/enumeration/OrderStatus.COMPLETED : Lorg/enumeration/OrderStatus;
+    AASTORE
+    PUTSTATIC org/enumeration/OrderStatus.$VALUES : [Lorg/enumeration/OrderStatus;
+    RETURN
+    MAXSTACK = 4
+    MAXLOCALS = 0
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>enum</code> 은 <code>final</code> 이기 때문에 상속받아 확장할 수 없고, <code>java.lang.Enum</code> 이라는 추상클래스를 상속받아 구현된 클래스라는 것을 알 수 있다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>각 상수들을 <code>public final static enum Lorg/enumeration/OrderStatus</code> 본인 타입의 멤버 변수로 선언하고 있다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>public static E[] values()</code>, <code>public static E valueOf(String name)</code> 메소드는 컴파일러에서 생성된 것이다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>private &lt;init&gt;(Ljava/lang/String;I)V</code> 부분은 생성자가 <code>private</code> 로, 외부에서 객체를 생성할 수 없다. 이는 열거 타입으로 선언된 인스턴스들은 하나씩만 존재함을 보장할 수 있게 한다(singleton)</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>enum은 사실상 추상클래스라고 할 수 있는데, 일반적인 추상 클래스와 마찬가지로 생성자, (추상/일반) 메소드, 변수들을 가질 수 있다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public enum OrderStatus {
+    REQUESTED(0) {
+        @Override
+        public void printStatus() { <i class="conum" data-value="1"></i><b>(1)</b>
+            System.out.println("주문이 접수되었습니다.");
+        }
+    },
+    ACCEPTED(1) {
+        @Override
+        public void printStatus() {
+            System.out.println("주문 요청이 처리되었습니다.");
+        }
+    },
+    COMPLETED(3) {
+        @Override
+        public void printStatus() {
+            System.out.println("주문 처리가 완료되었습니다.");
+        }
+    };
+
+    private final int code;
+    OrderStatus(int code) { <i class="conum" data-value="4"></i><b>(4)</b>
+        this.code = code;
+    }
+    public abstract void printStatus(); <i class="conum" data-value="2"></i><b>(2)</b>
+
+    public int getCode() {
+        return code;
+    }
+
+    public void printStatusCodeName() {
+        System.out.println(this.name()); <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>각 상수들은 마치 <code>OrderStatus</code> 이라는 추상클래스의 익명클래스를 생성하듯이 선언된다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>열거 타입은 추상 메소드를 사용해 상수별로 메서드를 구현하게 함으로써 각 상수별로 다르게 동작하는 코드를 구현할 수 있다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>java.lang.enum</code> 클래스에는 <code>name</code> 이라는 private 변수가 있는데, 이는 상수명을 가리킨다. 이 클래스에서 재정의된 <code>toString()</code> 은 이 <code>name</code> 을 리턴하도록 되어있다. 그러므로 <code>printStatusCodeName()</code> 같은 메소드를 생성할 필요없이 열거형 상수를 출력하기만 하면 상수명을 출력할 수 있다.
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public abstract class Enum&lt;E extends Enum&lt;E&gt;&gt; implements Comparable&lt;E&gt;, Serializable {
+    private final String name;
+    public final String name() {
+        return name;
+    }
+    public String toString() {
+        return name;
+    }
+...
+}</code></pre>
+</div>
+</div></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>enum</code> 에는 <code>ordinal()</code> 이라는 메소드가 있다. 모든 열거 타입은 각 상수들이 해당 열거 타입에서 몇 번째 위치인지를 반환하는 메소드이다. 위에서 구현한 것을 보면 각 코드 값이 순서대로 0~3 값을 넣고 있기 때문에 <code>ordinal()</code> 메소드를 사용하면 안되는지 의문이 생길 수 있다. 관련해서는 아래에서 더 자세히 살펴본다.</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public abstract class Enum&lt;E extends Enum&lt;E&gt;&gt; implements Comparable&lt;E&gt;, Serializable {
+    /**
+     * The ordinal of this enumeration constant (its position
+     * in the enum declaration, where the initial constant is assigned
+     * an ordinal of zero).
+     *
+     * Most programmers will have no use for this field.  It is designed
+     * for use by sophisticated enum-based data structures, such as
+     * {@link java.util.EnumSet} and {@link java.util.EnumMap}.
+     */
+    private final int ordinal; <i class="conum" data-value="1"></i><b>(1)</b>
+
+    /**
+     * Returns the ordinal of this enumeration constant (its position
+     * in its enum declaration, where the initial constant is assigned
+     * an ordinal of zero).
+     *
+     * Most programmers will have no use for this method.  It is
+     * designed for use by sophisticated enum-based data structures, such
+     * as {@link java.util.EnumSet} and {@link java.util.EnumMap}.
+     *
+     * @return the ordinal of this enumeration constant
+     */
+    public final int ordinal() {
+        return ordinal;
+    }
+
+    protected Enum(String name, int ordinal) {
+        this.name = name;
+        this.ordinal = ordinal;
+    }
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>주석을 보면 <code>대부분의 프로그래머들은 이 필드를 사용할 일이 없을 거다</code> 라고 있다. 이는 자바에서 <code>EnumSet</code> 또는 <code>EnumMap</code> 을 구현하기 위해 내부적으로 사용되는 것이라는 추가적인 설명도 볼 수 있다. <code>ordinal</code> 을 프로그램에서 사용할 코드 값으로 사용하는 것은 대단히 위험한 일이다. 위의 <a href="#OrderStatus">OrderStatus의 바이트코드</a> 에서 보면 내부적으로 <code>java.lang.Enum</code> 클래스의 생성자를 호출할 때, <code>Enum(상수명, 선언순서)</code> 의 형태로 호출하고 있다. <strong><code>ordinal</code> 은 순서 대로 할당이 되고, 순서를 건너 뛰는 것도 불가능하다.</strong> <strong>내부적으로 사용할 코드 값이 필요하면 열거형의 변수로 선언해서 값을 직접 할당한 뒤 사용하는게 좋다.</strong></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Copyright © <a href="https://opendevise.com">OpenDevise Inc.</a> and individual contributors to <a href="https://antora.org">Antora</a>. Site deploys by <a href="https://netlify.com">Netlify</a>.</p>
+  <p>Except where otherwise noted, docs.antora.org, Antora, and the Antora UI, are licensed under the <a href="https://www.mozilla.org/en-US/MPL/2.0/">Mozilla Public License Version 2.0</a> (MPL-2.0).</p>
+  <p>AsciiDoc® is a trademark of the Eclipse Foundation, Inc.</p>
+</footer>
+<script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
