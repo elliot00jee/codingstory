@@ -1,0 +1,321 @@
+= @RequestMapping과 핸들러 메소드
+:listing-caption!:
+
+Spring MVC에서 말하는 어노테이션 기반의 핸들러 메소드란, 간단하게 말하면 어노테이션 기반의 컨트롤러에서 `@RequestMapping` 이 붙은 메소드들을 말한다.
+`DispatcherServlet` 에 요청이 들어왔을 때, 해당 요청과 매핑되는 핸들러에 대한 정보를 담고 있는 `HandlerMapping` 들 중에, `RequestMappingHandlerMapping` 은 `@RequestMapping` 어노테이션을 사용하는 컨트롤러에 대한 매핑 정보를 처리한다. 이 매핑 정보를 초기화할 때, 등록된 빈들 중 핸들러로 판단되는 빈에서 `@RequestMapping` 어노테이션이 붙은 메소드들을 `HandlerMethod` 객체로 만들어서 등록하게 된다.
+
+.AbstractHandlerMethodMapping.java
+[,java]
+----
+protected void processCandidateBean(String beanName) {
+        Class<?> beanType = null;
+
+        try {
+            beanType = this.obtainApplicationContext().getType(beanName);
+        } catch (Throwable var4) {
+            if (this.logger.isTraceEnabled()) {
+                this.logger.trace("Could not resolve type for bean '" + beanName + "'", var4);
+            }
+        }
+
+        if (beanType != null && this.isHandler(beanType)) {
+            this.detectHandlerMethods(beanName);
+        }
+
+    }
+----
+
+.RequestMappingHandlerMapping.java
+[,java]
+----
+protected boolean isHandler(Class<?> beanType) { <.>
+    return AnnotatedElementUtils.hasAnnotation(beanType, Controller.class) || AnnotatedElementUtils.hasAnnotation(beanType, RequestMapping.class);
+}
+----
+<.> `@Controller` 또는 `@RequestMapping` 이 붙은 빈들을 핸들러라고 판단한다. 그래서 해당 클래스에 `@RequestMapping` 이 붙어있다면 `@Controller` 가 아니라 `@Component` 를 붙여주어도 요청 매핑이 되긴 하지만 명시적으로 컨트롤러임을 나타내기 위해 붙여준다.
+
+== Method Arguments
+애노테이션 기반 컨트롤러를 처리하는 `RequestMappingHandlerAdaptor` 는 요청 정보 또는 요청에 들어있는 정보들을 받아오기 위해서 여러 핸들러 메소드 아큐먼트들을 사용할 수 있는데, `HandlerMethodArgumentResolver` 를 호출해서 컨트롤러(핸들러)가 필요로 하는 다양한 파라미터의 값 또는 객체를 생성 한 뒤, 파라미터의 값이 모두 준비되면 컨트롤러를 호출하면서 값을 넘겨준다. 스프링 MVC이 기본적으로 제공하는 https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-arguments[메소드 아규먼트]들이 있고, 원한다면 인터페이스를 확장해서 커스텀하게 만들 수도 있다.
+
+=== ArgumentResolver 동작 원리
+
+.InvocableHandlerMethod.java
+[,java]
+----
+public Object invokeForRequest(NativeWebRequest request, @Nullable ModelAndViewContainer mavContainer, Object... providedArgs) throws Exception {
+    <.>
+    Object[] args = this.getMethodArgumentValues(request, mavContainer, providedArgs); <.>
+    if (logger.isTraceEnabled()) {
+        logger.trace("Arguments: " + Arrays.toString(args));
+    }
+
+    return this.doInvoke(args); <.>
+}
+protected Object[] getMethodArgumentValues(NativeWebRequest request, @Nullable ModelAndViewContainer mavContainer, Object... providedArgs) throws Exception {
+        MethodParameter[] parameters = this.getMethodParameters();
+        if (ObjectUtils.isEmpty(parameters)) {
+            return EMPTY_ARGS;
+        } else {
+            Object[] args = new Object[parameters.length];
+
+            for(int i = 0; i < parameters.length; ++i) {
+                MethodParameter parameter = parameters[i];
+                parameter.initParameterNameDiscovery(this.parameterNameDiscoverer);
+                args[i] = findProvidedArgument(parameter, providedArgs);
+                if (args[i] == null) {
+                    <.>
+                    if (!this.resolvers.supportsParameter(parameter)) {
+                        throw new IllegalStateException(formatArgumentError(parameter, "No suitable resolver"));
+                    }
+
+                    try {
+                        <.>
+                        args[i] = this.resolvers.resolveArgument(parameter, mavContainer, request, this.dataBinderFactory);
+                    ...
+}
+----
+<.> `RequestMappingHandlerAdapter` 에서 호출된다.
+<.> 현재 요청에서 사용된 Method Argument 와 매핑된 파라미터 값들을 가져오기 위한 메소드를 호출한다.
+<.> 준비된 파라미터 값들을 넘기면서 현재 요청을 처리할 핸들러를 호출한다.
+<.> 메소드 파라미터들을 반복문을 돌면서 처리하게 되는데, 등록된 `ArgumentResolver` 를 루프 돌면서 해당 파라미터를 지원하는지 체크한다.
+<.> 지원하는 `ArgumentResolver` 를 찾게 되면 실제로 값을 파라미터와 매핑하는 메소드를 호출한다.(직접적인 처리는 `HandlerMethodArgumentResolverComposite` 에서 수행된다.)
+
+.HandlerMethodArgumentResolverComposite.java
+[,java]
+----
+public boolean supportsParameter(MethodParameter parameter) {
+    return this.getArgumentResolver(parameter) != null;
+}
+
+@Nullable
+public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer, NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
+    HandlerMethodArgumentResolver resolver = this.getArgumentResolver(parameter);
+    if (resolver == null) {
+        throw new IllegalArgumentException("Unsupported parameter type [" + parameter.getParameterType().getName() + "]. supportsParameter should be called first.");
+    } else {
+        return resolver.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
+    }
+}
+
+@Nullable
+private HandlerMethodArgumentResolver getArgumentResolver(MethodParameter parameter) {
+    <.>
+    HandlerMethodArgumentResolver result = (HandlerMethodArgumentResolver)this.argumentResolverCache.get(parameter);
+    if (result == null) {
+        Iterator var3 = this.argumentResolvers.iterator();
+
+        while(var3.hasNext()) {
+            HandlerMethodArgumentResolver resolver = (HandlerMethodArgumentResolver)var3.next();
+            if (resolver.supportsParameter(parameter)) {
+                result = resolver;
+                this.argumentResolverCache.put(parameter, resolver);
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+----
+<.> `MethodParameter` 를 지원하는 `ArgumentResolver` 를 찾기 위해, 매번 등록된 `ArgumentResolver` 들의 `supportParameter` 메소드를 호출하는게 아니라, `Map<MethodParameter, HandlerMethodArgumentResolver> argumentResolverCache` 에 넣어놓고 캐싱한다.
+
+=== @RequestBody, @ResponseBody 와 HttpMessageConverter
+==== @RequestBody
+* `@RequestBody` 를 사용하면 HTTP 메시지 바디 정보를 편리하게 조회할 수 있다.
+* `HttpEntity`, `@RequestBody` 를 사용하면 HTTP 메시지 컨버터가 HTTP 메시지 바디의 내용을 우리가 원하는 문자나 객체 등으로 변환해준다.
+* `@ModelAttribute` 나 `@RequestParam` 과 달리 `@RequestBody` 는 생략할 수 없다.
+
+==== @ResponseBody
+* `@ResponseBody` 를 사용하면 응답 결과를 HTTP 메시지 바디에 직접 담아서 전달할 수 있다.
+
+==== HttpEntity
+* HTTP 헤더, 본문 정보를 편리하게 조회할 수 있으며, 요청과 응답에 모두 쓸 수 있다.
+* `HttpEntity` 를 상속받은 객체들도 있는데 부가 기능들을 추가로 제공한다.
+
+.RequestEntity.java
+[,java]
+----
+public class RequestEntity<T> extends HttpEntity<T> { <.>
+    @Nullable
+    private final HttpMethod method;
+    @Nullable
+    private final URI url;
+    @Nullable
+    private final Type type;
+    ...
+}
+----
+<.> HttpMethod, url 및 타입 정보들이 추가로 제공된다.
+
+.ResponseEntity.java
+[,java]
+----
+
+public class ResponseEntity<T> extends HttpEntity<T> { <.>
+    private final Object status;
+
+    public ResponseEntity(HttpStatus status) {
+        this((Object)null, (MultiValueMap)null, (HttpStatus)status);
+    }
+
+    public ResponseEntity(@Nullable T body, HttpStatus status) {
+        this(body, (MultiValueMap)null, (HttpStatus)status);
+    }
+
+    public ResponseEntity(MultiValueMap<String, String> headers, HttpStatus status) {
+        this((Object)null, headers, (HttpStatus)status);
+    }
+
+    public ResponseEntity(@Nullable T body, @Nullable MultiValueMap<String, String> headers, HttpStatus status) {
+        this(body, headers, (Object)status);
+    }
+    ...
+}
+----
+<.> HTTP 상태코드, 응답 본문, 헤더 등을 추가로 설정할 수 있다.
+
+==== HttpMessageConverter
+* 요청 본문에서 메시지를 읽어들이거나(@RequestBody), 응답 본문에 메시지를 작성할 때(@ResponseBody) 사용한다.
+* 스프링 부트를 사용하는 경우, `spring-boot-starter-web` 의존성이 있다면 JacksonJSON 2가 의존성에 들어간다. 즉, JSON용 HTTP 메시지 컨버터가 기본으로 등록 되게 된다.
+    image:3.png[]
+
+* 메시지 컨버터를 추가하여 사용하고 싶은 경우에는 xref:spring_mvc_settings.adoc[] 에서 본 것처럼 설정할 수 있다.
+
+.WebConfig.java
+[,java]
+----
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+    <.>
+    }
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+    <.>
+    }
+}
+----
+<.> 메시지 컨버터에 추가
+<.> 기본 메시지 컨버터 대체
+
+.WebMvcConfigurationSupport.java
+[,java]
+----
+protected final List<HttpMessageConverter<?>> getMessageConverters() {
+    if (this.messageConverters == null) {
+        this.messageConverters = new ArrayList();
+        this.configureMessageConverters(this.messageConverters);
+        if (this.messageConverters.isEmpty()) {
+            this.addDefaultHttpMessageConverters(this.messageConverters);
+        }
+
+        this.extendMessageConverters(this.messageConverters);
+    }
+
+    return this.messageConverters;
+}
+
+protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+}
+
+protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+}
+
+protected final void addDefaultHttpMessageConverters(List<HttpMessageConverter<?>> messageConverters) {
+    messageConverters.add(new ByteArrayHttpMessageConverter());
+    messageConverters.add(new StringHttpMessageConverter());
+    messageConverters.add(new ResourceHttpMessageConverter());
+    messageConverters.add(new ResourceRegionHttpMessageConverter());
+    ...
+    if (jackson2Present) {
+        builder = Jackson2ObjectMapperBuilder.json();
+        if (this.applicationContext != null) {
+            builder.applicationContext(this.applicationContext);
+        }
+
+        messageConverters.add(new MappingJackson2HttpMessageConverter(builder.build())); <.>
+    }
+    ...
+}
+----
+<.> 의존성에 jackson이 포함되어 있다면, 자동으로 `MappingJackson2HttpMessageConverter` 를 메시지 컨버터에 추가해준다.
+
+==== `@RequestBody` 동작원리
+
+.RequestResponseBodyMethodProcessor.java
+[,java]
+----
+public class RequestResponseBodyMethodProcessor extends AbstractMessageConverterMethodProcessor {
+    public boolean supportsParameter(MethodParameter parameter) {
+        <.>
+        return parameter.hasParameterAnnotation(RequestBody.class);
+    }
+
+    public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer, NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
+        parameter = parameter.nestedIfOptional();
+        Object arg = this.readWithMessageConverters(webRequest, parameter, parameter.getNestedGenericParameterType());
+        ....
+----
+<.> `@RequestBody` 메소드 아규먼트를 처리할 수 있는 `HandlerMethodArgumentResolver` 는 `RequestResponseBodyMethodProcessor` 이다.
+
+.AbstractMessageConverterMethodArgumentResolver.java
+[,java]
+----
+public abstract class AbstractMessageConverterMethodArgumentResolver implements HandlerMethodArgumentResolver {
+    protected <T> Object readWithMessageConverters(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType) throws IOException, HttpMediaTypeNotSupportedException, HttpMessageNotReadableException {
+
+        try {
+            message = new EmptyBodyCheckingHttpInputMessage(inputMessage);
+            Iterator var11 = this.messageConverters.iterator();
+
+            while(var11.hasNext()) {
+                HttpMessageConverter<?> converter = (HttpMessageConverter)var11.next();
+                Class<HttpMessageConverter<?>> converterType = converter.getClass();
+                GenericHttpMessageConverter<?> genericConverter = converter instanceof GenericHttpMessageConverter ? (GenericHttpMessageConverter)converter : null;
+
+                <.>
+                if (genericConverter != null) {
+                    if (!genericConverter.canRead(targetType, contextClass, contentType)) {
+                        continue;
+                    }
+                } else if (targetClass == null || !converter.canRead(targetClass, contentType)) {
+                    continue;
+                }
+
+                <.>
+                if (message.hasBody()) {
+                    HttpInputMessage msgToUse = this.getAdvice().beforeBodyRead(message, parameter, targetType, converterType);
+                    body = genericConverter != null ? genericConverter.read(targetType, contextClass, msgToUse) : converter.read(targetClass, msgToUse);
+                    body = this.getAdvice().afterBodyRead(body, msgToUse, parameter, targetType, converterType);
+                } else {
+                    body = this.getAdvice().handleEmptyBody((Object)null, message, parameter, targetType, converterType);
+                }
+                break;
+            }
+        }
+----
+<.> 등록된 `HttpMessageConverter` 들을 돌면서 해당 컨버터가 메시지를 읽을 수 있는지 체크한다.
+* 대상 클래스 타입을 지원하는지 그리고, HTTP 요청의 Content-Type(미디어타입)을 지원하는지
+<.> `canRead()` 조건을 만족하면 `read()` 를 호출해서 객체 생성하고, 반환한다.
+
+.HttpMessageConverter.java
+[,java]
+----
+public interface HttpMessageConverter<T> {
+    boolean canRead(Class<?> clazz, @Nullable MediaType mediaType);
+
+    boolean canWrite(Class<?> clazz, @Nullable MediaType mediaType);
+
+    List<MediaType> getSupportedMediaTypes();
+
+    default List<MediaType> getSupportedMediaTypes(Class<?> clazz) {
+        return !this.canRead(clazz, (MediaType)null) && !this.canWrite(clazz, (MediaType)null) ? Collections.emptyList() : this.getSupportedMediaTypes();
+    }
+
+    T read(Class<? extends T> clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException;
+
+    void write(T t, @Nullable MediaType contentType, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException;
+}
+----
