@@ -10,7 +10,7 @@ content:
   - url: https://github.com/elliot00jee/TIL.git
     branches: main
     start_path: docs
-  - url: ../learningstory
+  - url: ../mypage
     branches: main
     start_path: learningstory/docs
 ui:
