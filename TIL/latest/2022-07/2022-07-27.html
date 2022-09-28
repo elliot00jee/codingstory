@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Jackson의 PropertyNamingStrategy :: mypage</title>
+    <link rel="canonical" href="https://elliot00jee.github.io/mypage/TIL/latest/2022-07/2022-07-27.html">
+    <meta name="generator" content="Antora 3.1.1">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/site-extra.css">
+    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <a href="https://elliot00jee.github.io/mypage">mypage</a>
+      </div>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="TIL" data-version="latest">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">TIL</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">2022-07</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="2022-07-03.html">2022-07-03</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="2022-07-19.html">2022-07-19</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="2022-07-27.html">2022-07-27</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="2022-08-04.html">2022-08-04</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">TIL</span>
+    <span class="version">default</span>
+  </div>
+  <ul class="components">
+    <li class="component">
+      <a class="title" href="../../../codingstory/latest/index.html">CodingStory</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../codingstory/latest/index.html">default</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component is-current">
+      <a class="title" href="../index.html">TIL</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">default</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../../codingstory/latest/index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">TIL</a></li>
+    <li>2022-07</li>
+    <li><a href="2022-07-27.html">2022-07-27</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/elliot00jee/TIL/edit/main/docs/modules/2022-07/pages/2022-07-27.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Jackson의 PropertyNamingStrategy</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>TIL 이긴 한데 매일 쓰지 못하고 있어 <span class="line-through">짜증</span>죄책감이 들기 시작했다. 매일 매일 분명 배우는 건 있긴한데 글로 정리하는 게 역시 상당히 <span class="line-through">귀찮은</span>어려운 작업이다. 일주일에 하나라도 꾸준히 써보자는 생각으로 하고 있긴 한데&#8230;&#8203;</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_today_i_learned"><a class="anchor" href="#_today_i_learned"></a>Today I learned</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>일단 오늘 배운 것들 중에 기억에 남는 한 가지를 써보자면, Dto 객체에 <code>is</code> 로 시작하는 boolean 타입 변수가 있었다. 별 생각없이 MockMvc 테스트를 작성하고 있었는데, API 응답에 그 필드가 없다는 에러가 떠서 확인해보니 <code>is</code> prefix는 제거된 필드명이 있었다. 또 별 생각없이 <code>@JsonProperty("isXXX")</code> 를 붙여서 해결했는데, 이쯤되면 boolean 타입의 변수는 <code>is</code>, <code>has</code>, <code>should</code>, 뭐 이런걸 다 빼버려야 되는게 아닌가 싶다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class FeelLikeSleeping {
+    private boolean isVisible;
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(boolean visible) {
+        isVisible = visible;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>기본적으로 Lombok의 <code>@Getter/@Setter</code> 어노테이션을 사용하면 자동으로 만들어지는 Getter 메소드명은 <code>getIsXXX()/setIsXXX()</code> 가 아닌, <code>isXXX()/setXXX()</code> 다. Intellij에서 자동으로 생성해주는 Getter, Setter도 마찬가지다.</p>
+</li>
+<li>
+<p>자바빈 컨벤션에 따르면, 클래스 프로퍼티들은 <code>getPropety()</code>, <code>setProperty()</code> 메소드로 접근할 수 있고, boolean 타입의 경우, <code>getProperty()</code> 대신에 <code>isProperty()</code> 를 사용해야 한다.</p>
+</li>
+<li>
+<p>Intellij는 필드명이 <code>is</code> 로 시작하면 Getter 자동 생성 시 <code>isIsVisible()</code> 이 아니라, <code>isVisible()</code> 로 교정해준다. Setter도 마찬가지로, <code>setIsVisible()</code> 아니라, <code>setVisible()</code> 이다. 교정해주는건 <code>is</code> 뿐이고, 그동안 boolean 변수명으로 써왔던 <code>has</code>, <code>should</code> prefix는 <code>isHasProperty()</code>, <code>isShouldProperty()</code> 이렇게 생성된다.</p>
+</li>
+<li>
+<p><code>isIsProperty()</code> 가 좀 이상해보이긴 하지만, 내가 <code>isProperty</code> 를 필드명으로 쓰겠다는게 자동으로 저걸 교정해주는게 맞는 건가 싶긴하다. 여러 라이브러리에서 자바빈 컨벤션을 따르고 있고, <code>isPropety()</code> 를 Getter로 만들어버리면 내 변수명은 <code>property</code> 로 처리될텐데 말이다. Jackson 라이브러리도 마찬가지다.</p>
+</li>
+</ul>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>In absence of a registered custom strategy, default Java property naming strategy is used, which leaves field names as is, and removes set/get/is prefix from methods (as well as lower-cases initial sequence of capitalized characters).</p>
+</div>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Jackson naming strategy 설정 값이 없으면 기본적으로 메소드에서 <code>set/get/is</code> prefix를 제거한 값이 필드명이 된다.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_참고"><a class="anchor" href="#_참고"></a>참고</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://fasterxml.github.io/jackson-databind/javadoc/2.7/com/fasterxml/jackson/databind/PropertyNamingStrategy.html">Class PropertyNamingStrategy</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/JavaBeans">JavaBeans</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Copyright © <a href="https://opendevise.com">OpenDevise Inc.</a> and individual contributors to <a href="https://antora.org">Antora</a>. Site deploys by <a href="https://netlify.com">Netlify</a>.</p>
+  <p>Except where otherwise noted, docs.antora.org, Antora, and the Antora UI, are licensed under the <a href="https://www.mozilla.org/en-US/MPL/2.0/">Mozilla Public License Version 2.0</a> (MPL-2.0).</p>
+  <p>AsciiDoc® is a trademark of the Eclipse Foundation, Inc.</p>
+</footer>
+<script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

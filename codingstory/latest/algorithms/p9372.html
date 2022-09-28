@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>상근이의 여행 :: mypage</title>
+    <link rel="canonical" href="https://elliot00jee.github.io/mypage/codingstory/latest/algorithms/p9372.html">
+    <meta name="generator" content="Antora 3.1.1">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/site-extra.css">
+    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <a href="https://elliot00jee.github.io/mypage">mypage</a>
+      </div>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="codingstory" data-version="latest">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">CodingStory</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">👋 Hi, Stranger</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Antora</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../documentation/get-started.html">Antora로 페이지 생성하기</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../documentation/publish-to-github-pages.html">Github Page에 발행하기</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">CodingStory</span>
+    <span class="version">default</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">CodingStory</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">default</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../TIL/latest/index.html">TIL</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../TIL/latest/index.html">default</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">CodingStory</a></li>
+    <li><a href="p9372.html">상근이의 여행</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/elliot00jee/mypage/edit/main/codingstory/docs/modules/algorithms/pages/p9372.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">상근이의 여행</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.acmicpc.net/problem/9372">P9372</a></p>
+</li>
+<li>
+<p>문제 요약</p>
+<div class="ulist">
+<ul>
+<li>
+<p>상근이가 가장 적은 종류의 비행기를 타고 모든 국가들을 여행할 수 있도록 도와주자. 상근이가 한 국가에서 다른 국가로 이동할 때 다른 국가를 거쳐 가도(심지어 이미 방문한 국가라도) 된다.</p>
+</li>
+<li>
+<p>첫 번째 줄에는 국가의 수 N(2 ≤ N ≤ 1 000)과 비행기의 종류 M(1 ≤ M ≤ 10 000) 가 주어진다.
+이후 M개의 줄에 a와 b 쌍들이 입력된다. a와 b를 왕복하는 비행기가 있다는 것을 의미한다. (1 ≤ a, b ≤ n; a ≠ b)</p>
+</li>
+<li>
+<p>주어지는 비행 스케줄은 항상 연결 그래프를 이룬다.</p>
+</li>
+<li>
+<p>상근이가 모든 국가를 여행하기 위해 타야 하는 비행기 종류의 최소 개수를 출력한다.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_문제_풀이"><a class="anchor" href="#_문제_풀이"></a>문제 풀이</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>주어지는 간선은 비행기의 종류를 의미하고, 간선들 중에서 모든 노드를 이을 수 있는 최소 개수를 찾으면 되므로, 유니온 파인드를 사용하면 된다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class P9372 {
+
+    static int[] parents;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine());
+
+        for (int i = 0; i &lt; T; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int N = Integer.parseInt(st.nextToken());
+            int M = Integer.parseInt(st.nextToken());
+
+            parents = new int[N + 1];
+            int result = 0;
+            for (int j = 1; j &lt;= N; j++) {
+                parents[j] = j;
+            }
+
+            for (int j = 0; j &lt; M; j++) {
+                st = new StringTokenizer(br.readLine());
+                int a = Integer.parseInt(st.nextToken());
+                int b = Integer.parseInt(st.nextToken());
+
+                result += unionFind(a, b);
+            }
+            System.out.println(result);
+        }
+    }
+
+    public static int unionFind(int a, int b) {
+        if (isCycle(a, b)) {
+            return 0;
+        }
+
+        if (a &lt; b) {
+            parents[updateGetRoot(b)] = updateGetRoot(a);
+        } else {
+            parents[updateGetRoot(a)] = updateGetRoot(b);
+        }
+
+        return 1;
+    }
+
+    public static boolean isCycle(int a, int b) {
+        if (updateGetRoot(a) == updateGetRoot(b)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static int updateGetRoot(int a) {
+        if (parents[a] == a) {
+            return a;
+        }
+        return parents[a] = updateGetRoot(parents[a]);
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Copyright © <a href="https://opendevise.com">OpenDevise Inc.</a> and individual contributors to <a href="https://antora.org">Antora</a>. Site deploys by <a href="https://netlify.com">Netlify</a>.</p>
+  <p>Except where otherwise noted, docs.antora.org, Antora, and the Antora UI, are licensed under the <a href="https://www.mozilla.org/en-US/MPL/2.0/">Mozilla Public License Version 2.0</a> (MPL-2.0).</p>
+  <p>AsciiDoc® is a trademark of the Eclipse Foundation, Inc.</p>
+</footer>
+<script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

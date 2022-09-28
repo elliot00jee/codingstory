@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>String, StringBuilder, StringBuffer :: mypage</title>
+    <link rel="canonical" href="https://elliot00jee.github.io/mypage/codingstory/latest/java/string-stringbuilder-stringbuffer.html">
+    <meta name="generator" content="Antora 3.1.1">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/site-extra.css">
+    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <a href="https://elliot00jee.github.io/mypage">mypage</a>
+      </div>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="codingstory" data-version="latest">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">CodingStory</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">👋 Hi, Stranger</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Antora</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../documentation/get-started.html">Antora로 페이지 생성하기</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../documentation/publish-to-github-pages.html">Github Page에 발행하기</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">CodingStory</span>
+    <span class="version">default</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">CodingStory</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">default</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../TIL/latest/index.html">TIL</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../TIL/latest/index.html">default</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">CodingStory</a></li>
+    <li><a href="string-stringbuilder-stringbuffer.html">String, StringBuilder, StringBuffer</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/elliot00jee/mypage/edit/main/codingstory/docs/modules/java/pages/string-stringbuilder-stringbuffer.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">String, StringBuilder, StringBuffer</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p><i class="fa fa-check-square-o"></i> String, StringBuilder, StringBuffer 란 무엇인가?</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_string_클래스"><a class="anchor" href="#_string_클래스"></a>String 클래스</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>일반적으로 <code>String</code> 을 <code>new</code> 연산자로 생성하지 않고 기본형 변수처럼 <code>=</code> 를 사용해서 생성하지만, 엄연히 참조형 변수이다. String 객체가 생성될 때 내부적으로 문자형 배열(char[])을 사용해서 문자열을 입력받게 된다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public final class String
+    implements java.io.Serializable, Comparable&lt;String&gt;, CharSequence {
+    /** The value is used for character storage. */
+    private final char value[];
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_불변_객체"><a class="anchor" href="#_불변_객체"></a>불변 객체</h3>
+<div class="paragraph">
+<p><code>char[]</code> 배열의 <code>final</code> 을 보면 알 수 있듯이, <code>String</code> 객체는 불변이다. 즉, 한번 생성하면 변경할 수 없단 얘기다. <code>String</code> 문자열을 다른 것과 합치게 되면, 합쳐진 새로운 <code>String</code> 객체가 생성되고, 참조를 잃은 이전 객체는 GC의 대상이 된다.</p>
+</div>
+<div id="StringTest" class="listingblock">
+<div class="title">StringTest.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class StringTest {
+    public static void main(String[] args) {
+        String a = "Adventure";
+        a += "Time";
+
+        String b = "Adventure";
+        String c = "Adventure";
+    }
+}</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/1.png" alt="1">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_문자_리터럴"><a class="anchor" href="#_문자_리터럴"></a>문자 리터럴</h3>
+<div class="paragraph">
+<p>자바 소스파일에 포함된 모든 문자열 리터럴은 컴파일 시에 클래스 파일의 런타임 상수 풀에 저장되는데, 이때 문자 리터럴은 한번만 저장되어 공유된다.
+<a href="#StringTest">위 소스</a>에서 보면 <code>Adventrue</code> 라는 문자열을 여러 번 생성했지만 상수풀에는 #28 에 한번만 저장되어 있고, 바이트코드에서 봐도 동일한 상수풀 주소(#2)을 참조하고 있다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">Constant pool:
+   #1 = Methodref          #9.#27         // java/lang/Object."&lt;init&gt;":()V
+   #2 = String             #28            // Adventure
+   #3 = Class              #29            // java/lang/StringBuilder
+   #4 = Methodref          #3.#27         // java/lang/StringBuilder."&lt;init&gt;":()V
+   #5 = Methodref          #3.#30         // java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+   #6 = String             #31            // Time
+   #7 = Methodref          #3.#32         // java/lang/StringBuilder.toString:()Ljava/lang/String;
+   #8 = Class              #33            // org/example/StringTest
+   #9 = Class              #34            // java/lang/Object
+  #10 = Utf8               &lt;init&gt;
+  #11 = Utf8               ()V
+  #12 = Utf8               Code
+  #13 = Utf8               LineNumberTable
+  #14 = Utf8               LocalVariableTable
+  #15 = Utf8               this
+  #16 = Utf8               Lorg/example/StringTest;
+  #17 = Utf8               main
+  #18 = Utf8               ([Ljava/lang/String;)V
+  #19 = Utf8               args
+  #20 = Utf8               [Ljava/lang/String;
+  #21 = Utf8               a
+  #22 = Utf8               Ljava/lang/String;
+  #23 = Utf8               b
+  #24 = Utf8               c
+  #25 = Utf8               SourceFile
+  #26 = Utf8               StringTest.java
+  #27 = NameAndType        #10:#11        // "&lt;init&gt;":()V
+  #28 = Utf8               Adventure <i class="conum" data-value="1"></i><b>(1)</b>
+  #29 = Utf8               java/lang/StringBuilder
+  #30 = NameAndType        #35:#36        // append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  #31 = Utf8               Time
+  #32 = NameAndType        #37:#38        // toString:()Ljava/lang/String;
+  #33 = Utf8               org/example/StringTest
+  #34 = Utf8               java/lang/Object
+  #35 = Utf8               append
+  #36 = Utf8               (Ljava/lang/String;)Ljava/lang/StringBuilder;
+  #37 = Utf8               toString
+  #38 = Utf8               ()Ljava/lang/String;
+
+ 0: ldc           #2                  // String Adventure
+ 2: astore_1
+ 3: new           #3                  // class java/lang/StringBuilder
+ 6: dup
+ 7: invokespecial #4                  // Method java/lang/StringBuilder."&lt;init&gt;":()V
+10: aload_1
+11: invokevirtual #5                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+14: ldc           #6                  // String Time
+16: invokevirtual #5                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+19: invokevirtual #7                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+22: astore_1
+23: ldc           #2                  // String Adventure <i class="conum" data-value="2"></i><b>(2)</b>
+25: astore_2
+26: ldc           #2                  // String Adventure
+28: astore_3
+29: return</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_생성자_사용"><a class="anchor" href="#_생성자_사용"></a>생성자 사용</h3>
+<div class="paragraph">
+<p>위에서 본 것 처럼 문자열 리터럴을 지정하는 것이 아닌, <code>new</code> 연산자를 사용하여 문자열을 생성할 수 있는데, 이 때는 같은 문자열이라고 할지라도 새로운 메모리를 할당받고 새로운 String 객체를 생성하게 된다. 문자열 리터럴은 이미 존재하면 재사용이 가능하지만 생성자를 통해 만들게 되면 매번 새로운 객체를 만드는 것이다.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Copyright © <a href="https://opendevise.com">OpenDevise Inc.</a> and individual contributors to <a href="https://antora.org">Antora</a>. Site deploys by <a href="https://netlify.com">Netlify</a>.</p>
+  <p>Except where otherwise noted, docs.antora.org, Antora, and the Antora UI, are licensed under the <a href="https://www.mozilla.org/en-US/MPL/2.0/">Mozilla Public License Version 2.0</a> (MPL-2.0).</p>
+  <p>AsciiDoc® is a trademark of the Eclipse Foundation, Inc.</p>
+</footer>
+<script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

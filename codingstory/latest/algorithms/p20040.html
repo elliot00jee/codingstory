@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>사이클 게임 :: mypage</title>
+    <link rel="canonical" href="https://elliot00jee.github.io/mypage/codingstory/latest/algorithms/p20040.html">
+    <meta name="generator" content="Antora 3.1.1">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/site-extra.css">
+    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <a href="https://elliot00jee.github.io/mypage">mypage</a>
+      </div>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="codingstory" data-version="latest">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">CodingStory</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">👋 Hi, Stranger</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Antora</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../documentation/get-started.html">Antora로 페이지 생성하기</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../documentation/publish-to-github-pages.html">Github Page에 발행하기</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">CodingStory</span>
+    <span class="version">default</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">CodingStory</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">default</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../TIL/latest/index.html">TIL</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../TIL/latest/index.html">default</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">CodingStory</a></li>
+    <li><a href="p20040.html">사이클 게임</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/elliot00jee/mypage/edit/main/codingstory/docs/modules/algorithms/pages/p20040.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">사이클 게임</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.acmicpc.net/problem/20040">문제 바로 가기</a></p>
+</li>
+<li>
+<p>입력으로 점의 개수 n과 m 번째 차례까지의 게임 진행 상황이 주어지면 사이클이 완성 되었는지를 판단하고, 완성되었다면 몇 번째 차례에서 처음으로 사이클이 완성된 것인지를 출력하는 프로그램을 작성하시오.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_유니온_파인드로_트리_구조_만들기"><a class="anchor" href="#_유니온_파인드로_트리_구조_만들기"></a>유니온 파인드로 트리 구조 만들기</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>노드 A, B를 하나의 집합으로 만든다. 둘 중 작은 수 또는 큰 수로 기준을 정해서 부모 노드를 배열에 저장한다.</p>
+</li>
+<li>
+<p>트리는 순환이 없는 연결 그래프 이므로, 사이클이 생기지 않았는지 체크한다.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>부모 노드가 동일할 경우 사이클이 생겼다고 판단할 수 있다.</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_예시"><a class="anchor" href="#_예시"></a>예시</h3>
+<div class="paragraph">
+<p>0에서 5까지의 노드가 있고, (0,1) (1,2) (1, 3) (0, 3) 의 순서로 간선을 추가한다고 하자.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>부모 노드 정보를 저장할 배열을 선언하고 본인 노드로 초기화한다.
+<span class="image"><img src="_images/1.png" alt="1"></span></p>
+</li>
+<li>
+<p>첫 번째, 0번 노드와 1번 노드를 연결한다. 1번 노드의 부모를 0번으로 업데이트한다.</p>
+<div class="paragraph">
+<p><span class="image"><img src="_images/2.png" alt="2"></span></p>
+</div>
+</li>
+<li>
+<p>두 번째, 세 번째도 마찬가지로 작은 수로 부모 노드를 업데이트 한다.
+<span class="image"><img src="_images/3.png" alt="3"></span></p>
+</li>
+<li>
+<p>네 번째, 0번 노드와 3번 노드를 연결하려고 할 때, 부모 노드가 둘 다 0이기 때문에 사이클이 생긴 것을 확인 할 수 있다.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="_images/4.png" alt="4"></span></p>
+</div>
+<div class="paragraph">
+<p>코드로 나타내면 다음과 같다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static void main(String[] args) {
+
+    int[][] edge = new int[][]{{0,1}, {1,2} {1,3}, {0,3}};
+
+    int[] parent = new int[]{0, 1, 2, 3, 4, 5}; <i class="conum" data-value="1"></i><b>(1)</b>
+
+    int result = 0;
+    for (int i = 0; i &lt; 4; i++) {
+        int A = edge[i][0];
+        int B = edge[i][1];
+
+        if (isCycle(A, B)) {
+            System.out.println("사이클이 생겼습니다.");
+            break;
+        }
+        if (A &lt; B) {
+            parent[B] = parent[A]; <i class="conum" data-value="2"></i><b>(2)</b>
+        }
+    }
+}
+public static boolean isCycle(int x, int y) {
+    return parent[x] == parent[y]; <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>부모 노드를 본인 노드 번호로 초기화한다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>작은 수를 부모 노드로 업데이트한다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>각각의 부모 노드를 조회하여 사이클이 발생했는지 확인한다.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>위 코드에는 문제가 하나 있는데, 다음과 같은 상황에서 생긴다.</p>
+</div>
+<div class="paragraph">
+<p>0에서 2까지의 노드가 있고, (1,2), (0,1), (0,2)의 순서로 간선을 추가한다고 하자.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>부모 노드 정보를 초기화 한 뒤, 첫 번째 간선을 추가한다.</p>
+<div class="paragraph">
+<p><span class="image"><img src="_images/5.png" alt="5"></span></p>
+</div>
+</li>
+<li>
+<p>두 번째 간선을 추가한다.</p>
+<div class="paragraph">
+<p><span class="image"><img src="_images/6.png" alt="6"></span></p>
+</div>
+</li>
+<li>
+<p>세 번째 간선을 추가하려고 보니, 0번과 2번의 부모는 다르기 때문에 사이클이 발생하지 않을 것 같지만, 그래프로 확인해보면 사이클이 발생할 것으로 보인다.</p>
+<div class="paragraph">
+<p><span class="image"><img src="_images/7.png" alt="7"></span></p>
+</div>
+<div class="paragraph">
+<p>2번에서 0과 1이 연결될 때, 1의 자식 노드인 2의 부모 노드도 업데이트가 되었어야 한다. 매번 자식 노드를 전부 찾아서 업데이트 하는 것 보다는 사이클이 발생했는지 여부를 판단할 때 부모 노드를 조회하면서 업데이트하는 것이 효율적일 것 같다.</p>
+</div>
+<div class="paragraph">
+<p>즉, 3번에서 2의 부모 노드를 조회할 때, 1이 아니라, 루트 부모 노드를 조회한다. 이는 0이고, 0의 부모 노드와 동일하기 때문에 사이클이 발생하는 것을 알 수 있게 된다. 해당 로직을 소스에 반영하면 다음과 같다.</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static void main(String[] args) {
+
+    int[][] edge = new int[][]{{0,1}, {1,2} {1,3}, {0,3}};
+
+    int[] parent = new int[]{0, 1, 2, 3, 4, 5};
+
+    int result = 0;
+    for (int i = 0; i &lt; 4; i++) {
+        int A = edge[i][0];
+        int B = edge[i][1];
+
+        if (isCycle(A, B)) {
+            System.out.println("사이클이 생겼습니다.");
+            break;
+        }
+        if (A &lt; B) {
+            parent[B] = parent[A];
+        }
+    }
+}
+
+public static boolean isCycle(int x, int y) {
+    return updateGetRoot(x) == updateGetRoot(y); <i class="conum" data-value="1"></i><b>(1)</b>
+}
+
+public static int updateGetRoot(int v) {
+    if(parent[v] == v) return v; <i class="conum" data-value="2"></i><b>(2)</b>
+    return parent[v] = updateGetRoot(parent[v]);
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>각각의 부모 노드가 아니라, 루트 노드를 조회한다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>본인 노드 번호와 부모 노드 번호가 동일하면 루트 노드라고 판단한다.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>위 소스에도 한 가지 문제가 있는데, 다음과 같은 상황에서 발생한다.</p>
+</div>
+<div class="paragraph">
+<p>마찬가지로 0에서 2까지의 노드가 있고, 이번에는 (1,2), (0,2), (0,1) 순서로 간선을 생성한다고 하자.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>(1,2) (0,2) 까지의 간선을 연결하고 나면, 2번의 부모노드는 1 ➔ 0 으로 바뀌고, 그래프는 다음과 같다.
+<span class="image"><img src="_images/8.png" alt="8"></span></p>
+</li>
+<li>
+<p>(0,1) 간선을 추가하려고 보니 사이클이 발생하지만 부모 노드는 다르기 때문에 사이클을 확인할 수 없다.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>이는 (0,2) 간선을 추가했을 때, 2의 부모 노드인 1도 부모 노드가 업데이트 되지 않았기 때문이다. 사이클을 판별하기 위해서는 0과 2를 연결하는게 아니라, 0과 2의 부모인 1을 연결해야 한다. 즉, 2의 부모 노드인 1의 부모 노드를 0으로 업데이트해야 한다.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="_images/9.png" alt="9"></span></p>
+</div>
+<div class="paragraph">
+<p>이 상황에서 (0,1) 간선을 추가하려고 보면 부모 노드가 같기 때문에 이미 한 집합인 것으로 사이클을 판별할 수 있다. 참고로 2의 부모노드가 아직 1인 것은 나중에 2의 노드가 다른 노드와 연결 될 때, 부모 노드를 조회하면서 업데이트 되기 때문에 상관없다. 이를 소스에 반영하면 다음과 같다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static void main(String[] args) {
+
+    int[][] edge = new int[][]{{0,1}, {1,2} {1,3}, {0,3}};
+
+    int[] parent = new int[]{0, 1, 2, 3, 4, 5};
+
+    int result = 0;
+    for (int i = 0; i &lt; 4; i++) {
+        int A = edge[i][0];
+        int B = edge[i][1];
+
+        if (isCycle(A, B)) {
+            System.out.println("사이클이 생겼습니다.");
+            break;
+        }
+        if (A &lt; B) {
+            parent[updateGetRoot(B)] = updateGetRoot(A); <i class="conum" data-value="1"></i><b>(1)</b>
+        } else {
+            parent[updateGetRoot(A)] = updateGetRoot(B);
+        }
+
+    }
+}
+
+public static boolean isCycle(int x, int y) {
+    return updateGetRoot(x) == updateGetRoot(y); <i class="conum" data-value="2"></i><b>(2)</b>
+}
+
+public static int updateGetRoot(int v) {
+    if(parent[v] == v) return v; <i class="conum" data-value="3"></i><b>(3)</b>
+    return parent[v] = updateGetRoot(parent[v]);
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>두 노드가 아닌, 두 노드의 부모 노드가 연결되도록 해야 한다.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_결과"><a class="anchor" href="#_결과"></a>결과</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+    static int[] parent;
+        public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
+        int[][] edge = new int[M][2];
+
+        parent = new int[N];
+
+        for (int i = 0; i &lt; N; i++) {
+            parent[i] = i;
+        }
+
+        for (int i = 0; i &lt; M; i++) {
+            st = new StringTokenizer(br.readLine());
+            edge[i][0] = Integer.parseInt(st.nextToken());
+            edge[i][1] = Integer.parseInt(st.nextToken());
+        }
+
+        int result = 0;
+        for (int i = 0; i &lt; M; i++) {
+            int x = edge[i][0];
+            int y = edge[i][1];
+
+            if (isCycle(x, y)) {
+                result = i + 1;
+                break;
+            }
+            unionFind(x, y);
+        }
+
+        System.out.println(result);
+    }
+
+    public static void unionFind(int x, int y) {
+        if (x &lt; y) {
+            parent[updateGetRoot(y)] = updateGetRoot(x);
+        } else {
+            parent[updateGetRoot(x)] = updateGetRoot(y);
+        }
+    }
+
+    public static boolean isCycle(int x, int y) {
+        return updateGetRoot(x) == updateGetRoot(y);
+    }
+
+    public static int updateGetRoot(int v) {
+        if(parent[v] == v) return v;
+        return parent[v] = updateGetRoot(parent[v]);
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Copyright © <a href="https://opendevise.com">OpenDevise Inc.</a> and individual contributors to <a href="https://antora.org">Antora</a>. Site deploys by <a href="https://netlify.com">Netlify</a>.</p>
+  <p>Except where otherwise noted, docs.antora.org, Antora, and the Antora UI, are licensed under the <a href="https://www.mozilla.org/en-US/MPL/2.0/">Mozilla Public License Version 2.0</a> (MPL-2.0).</p>
+  <p>AsciiDoc® is a trademark of the Eclipse Foundation, Inc.</p>
+</footer>
+<script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
