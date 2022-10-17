@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>기지국 설치 :: mypage</title>
+    <link rel="canonical" href="https://elliot00jee.github.io/mypage/codingstory/latest/algorithms/p12979.html">
+    <meta name="generator" content="Antora 3.1.1">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/site-extra.css">
+    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <a href="https://elliot00jee.github.io/mypage">mypage</a>
+      </div>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="codingstory" data-version="latest">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">CodingStory</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">👋 Hi, Stranger</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Antora</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../documentation/get-started.html">Antora로 페이지 생성하기</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../documentation/publish-to-github-pages.html">Github Page에 발행하기</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">CodingStory</span>
+    <span class="version">default</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">CodingStory</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">default</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../learningstory/latest/index.html">learningstory</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../learningstory/latest/index.html">default</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../TIL/latest/index.html">TIL</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../TIL/latest/index.html">default</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">CodingStory</a></li>
+    <li><a href="p12979.html">기지국 설치</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/elliot00jee/mypage/edit/main/codingstory/docs/modules/algorithms/pages/p12979.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">기지국 설치</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://school.programmers.co.kr/learn/courses/30/lessons/12979">문제 바로 가기</a></p>
+</li>
+<li>
+<p>일렬로 늘어선 아파트가 있고, 전파 도달 거리가 w인 기지국이 있다. 모든 아파트에 전파를 전달하기 위해 증설해야 할 기지국 개수의 최솟값을 리턴하라.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="10.png" alt="10">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_문제_풀이"><a class="anchor" href="#_문제_풀이"></a>문제 풀이</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_접근_방법"><a class="anchor" href="#_접근_방법"></a>접근 방법</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>아파트 1번부터 이미 전파가 도달 가능한 첫 번째 아파트 그룹 직전까지 연속된 아파트의 개수를 센다.</p>
+</li>
+<li>
+<p>전파가 도달하지 않는 아파트들에 필요한 최소한의 기지국 수를 계산한다.</p>
+</li>
+<li>
+<p>전파가 도달 가능한 첫 번째 아파트 그룹 이후 부터 다시 반복한다.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_예제"><a class="anchor" href="#_예제"></a>예제</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>아파트 수=11</code>, <code>w=1</code>, <code>설치된 기지국=4,11</code> 에서 전파가 도달된 아파트를 표시하면 다음과 같다.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="11.png" alt="11">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>아파트 1번 부터 시작한다. 이미 <code>전파가 도달 가능한 첫 번째 아파트 그룹 직전</code> 의 위치는 다음과 같이 구할 수 있다.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>시작점 = 1</p>
+</li>
+<li>
+<p>끝점 = 첫번째 기지국 위치 - 전파 도달 거리 - 1</p>
+</li>
+<li>
+<p>하나의 기지국이 커버 가능한 아파트 개수 = 2 X 전파 도달 거리 + 1</p>
+</li>
+<li>
+<p>시작점과 끝점 사이에 필요한 최소한의 기지국 개수 = (끝점 - 시작점 + 1) / 하나의 기지국이 커버 가능한 아파트 개수</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="12.png" alt="12">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>그 다음은 첫 번째 아파트 그룹이 끝나는 다음 위치부터 시작하며, 위 과정을 반복하며 <code>count</code> 를 누적합 한다.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="13.png" alt="13">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_예외_처리"><a class="anchor" href="#_예외_처리"></a>예외 처리</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>마지막 기지국이 아파트 중간일 경우도 대비하여 계산해줘야 한다.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="14.png" alt="14">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>시작점이 마지막 아파트를 벗어나는 경우에는 더 이상 계산하지 않도록 멈춰야 한다.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="15.png" alt="15">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_소스_코드"><a class="anchor" href="#_소스_코드"></a>소스 코드</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static int solution(int n, int[] stations, int w) {
+    int answer = 0;
+
+    int start = 1;
+    int end;
+    for (int i = 0; i &lt;= stations.length; i++) { <i class="conum" data-value="1"></i><b>(1)</b>
+        if (start &gt; n) break; <i class="conum" data-value="2"></i><b>(2)</b>
+
+        if (i == stations.length) {
+            end = n;
+        } else {
+            end = stations[i] - w - 1;
+        }
+
+        if (end &gt;= start) { <i class="conum" data-value="3"></i><b>(3)</b>
+            double v = (double) (end - start + 1) / (2 * w + 1);
+            if (v % 1 == 0) { <i class="conum" data-value="4"></i><b>(4)</b>
+                answer += (int) v;
+            } else {
+                answer += (int) v;
+                answer += 1;
+            }
+        }
+
+
+        if (i != stations.length) { <i class="conum" data-value="5"></i><b>(5)</b>
+            start = stations[i] + w + 1;
+        }
+    }
+
+    return answer;
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>마지막 기지국 이후의 아파트도 고려하기 위해, 기지국 개수보다 반복문을 한번 더 수행하도록 한다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>시작점이 마지막 아파트를 벗어나는 경우 반복문 중단
+&lt;3&gt;
+<div class="ulist">
+<ul>
+<li>
+<p>시작점보다 다음 기지국에서 전파 가능한 가장 왼쪽 아파트가 더 왼쪽일 경우는 계산하지 않도록 한 것인데, <code>(end - start + 1) / (2 * w + 1)</code> 을 올림한 값이 <code>-1</code> 이상이 될 가능성은 없으므로 사실 필요 없다. (<code>end</code> 와 <code>start</code> 가 역전될 경우, 둘의 차는 항상 <code>w</code> 보다 작기 때문에)</p>
+</li>
+<li>
+<p>눈이 어떻게 되었는지 <code>end &gt; start</code> 로 넣고 하면서 왜 안되지 1시간 삽질. 화난다.</p>
+</li>
+</ul>
+</div></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>Math.ceildouble) (end - start + 1) / (2 * w + 1</code> 로 해도 되지만, 직접 구현 했을 때 훨씬 빠르다.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>의도적으로 기지국 개수보다 한번 더 반복문을 수행하도록 되어있기 때문에 <code>ArrayIndexOutOfBoundsException</code> 방지</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Copyright © <a href="https://opendevise.com">OpenDevise Inc.</a> and individual contributors to <a href="https://antora.org">Antora</a>. Site deploys by <a href="https://netlify.com">Netlify</a>.</p>
+  <p>Except where otherwise noted, docs.antora.org, Antora, and the Antora UI, are licensed under the <a href="https://www.mozilla.org/en-US/MPL/2.0/">Mozilla Public License Version 2.0</a> (MPL-2.0).</p>
+  <p>AsciiDoc® is a trademark of the Eclipse Foundation, Inc.</p>
+</footer>
+<script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
