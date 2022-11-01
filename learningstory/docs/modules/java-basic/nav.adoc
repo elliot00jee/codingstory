@@ -1,3 +1,4 @@
 * 자바의 기본
 ** xref:variable.adoc[]
 ** xref:enum.adoc[Enum]
+** xref:lamda_and_functional_interface.adoc[]
