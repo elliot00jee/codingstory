@@ -12,4 +12,5 @@ nav:
   - modules/ROOT/nav.adoc
   - modules/documentation/nav.adoc
   - modules/algorithms/nav.adoc
+  - modules/cka/nav.adoc
 

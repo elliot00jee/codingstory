@@ -1,0 +1,147 @@
+= CheatSheet for CKA
+:listing-caption!:
+
+* Imperative command 를 활용하는 방법
+** 익혀놓으면 Yaml 파일을 복사해서 쓰는 방식 보다 무조건 빠르다.
+** 최대한 명령형 커맨드로 실행한 뒤, 지원되지 않는 부분은 yaml에서 수정한다.
+* 공통 부분
++
+----
+[--dry-run=client -o yaml]
+[-n,--namespace=<namespace-name>]
+[--lables=<key=value>]<1>
+----
+<1> `label` 이 여러 개일 경우 `,` 로 구분
++
+
+* 자주 쓰는 리소스 축약어
+** Pod(po), Deployment(deploy), Service(svc), ReplicaSet(rs), Daemonsets(ds), StatefulSet(sts), ServiceAccount(sa), PersistentVolume(pv), PersistentVolumeClaim(pvc), Node(no), CertificateSigningRequest(csr), NetworkPolicy(netpol), StorageClass(sc)
+
+* Pod
++
+----
+kubectl run <pod-name> --image=<image-name>
+    [--port=<port>]
+    [--expose]<1>
+    [--env=<key=value>]<2>
+    [--command]
+----
+<1> 해당 `Pod` 를 노출하는 같은 이름의 `ClusterIP` 타입 `Service` 를 생성함. `--port` 옵션 필수
+<2> `env` 는 배열 형태(label` 과는 달리 `--env` 에 한 개씩 선언한다. ex) --env="DNS_DOMAIN=cluster")
+--env="POD_NAMESPACE=default"
++
+
+* Deployment
++
+----
+kubectl create <deploy-name> --image=<image-name>
+    [--replicas=<number-of-replicas(1)>]
+    [--port=<port>]
+----
++
+* DaemonSet
+** `create daemonset` 명령어는 없고, `deployment` 와 형태가 비슷하기 때문에 `create deployment` 로 `Yaml` 을 생성한다.
+** 생성된 `Yaml` 에서 `replicas` 및 `strategy` 필드를 삭제한다.
+* Service
++
+----
+kubectl expose <target-type> <target-name> <1>
+    [--name=<service-name>] <2>
+    [--port=<port(80)>]
+    [--target-port=<target-port or name>]
+    [--type=NodePort|ClusterIP(default)|LoadBalancer]
+    [--protocol=TCP|UDP|SCTP]
+----
+<1> `target-type` 은 `pod, service, replicationcontroller, deployment,
+replicaset`
+<2> Default는 `target-name` 과 동일
++
+
+* Ingress
+** `pathType` 은 `Exact` 가 Default
++
+----
+kubectl create ingress <ingress-name>
+    --rule=<host-url>/<path>=<service-name>:<port>
+----
++
+
+* Namespace
++
+----
+kubectl create namespace <namespace-name>
+----
++
+
+* ConfigMap
+** `--from` 옵션들은 모두 배열 형태
+
++
+----
+kubectl create configmap <configmap-name>
+    [--from-file=<file-path>]
+    [--from-literal=<key=value>]
+----
++
+
+* Secret - Docker registry 인증
++
+----
+kubectl create secret docker-registry <secret-name>
+    --docker-username=<docker-username>
+    --docker-password=<docker-password>
+    --docker-server=<docker-registy-server>
+
+kubectl create secret docker-registry <secret-name>
+    --from-file=<docker-config-file-path>
+----
++
+* Secret - 일반적인 키
++
+----
+kubectl create secret generic <secret-name>
+    [--from-file=<file-path>]
+    [--from-literal=<key=value>]
+----
++
+* ServiceAccount
++
+----
+kubectl create serviceaccount <serviceaccount-name>
+----
++
+* Role/ClusterRole
+** `--verb`, `--resource` 는 배열 형태
+
++
+----
+kubectl create role|clusterrole <role-name>
+    --verb=create|get|delete|list|watch|'*'(all)
+    --resource=<resource-type>
+----
++
+* RoleBinding
++
+----
+kubectl create rolebinding <rolebinding-name>
+    --role=<role-name> or --clusterrole=<cluster-role-name>
+    [--serviceaccount=<namespace:serviceaccount-name>]
+    [--user=<user-name>]
+----
++
+* ClusterRoleBinding
++
+----
+kubectl create clusterrolebinding <clusterrolebinding-name>
+    --clusterrole=<cluster-role-name>
+    [--serviceaccount=<namespace:serviceaccount-name>]
+    [--user=<user-name>]
+----
++
+* User 또는 ServiceAccount의 권한 확인
++
+----
+kubectl auth can-i <verb> <resource>
+    --as=<system:serviceaccount:<namespace>:<serviceaccount-name>> or <username>
+----
++
