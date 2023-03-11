@@ -1,4 +1,4 @@
-= CheatSheet for CKA
+= CheatSheet for CKS
 :listing-caption!:
 
 * kubelet authorization/authentication
@@ -100,8 +100,9 @@ metadata:
   labels:
     app: violation-pod
   annotations:
-    container.apparmor.security.beta.kubernetes.io/<container_name>: localhost/<profile_name>
+    container.apparmor.security.beta.kubernetes.io/<container_name>: localhost/<profile_name> <.>
 ----
+<.> pod의 metadata의 annotations 부분
 * Admission Webhook Server - OPA
 ** OPA 설치
 1. http://github.com/open-policy-agent 접속 후 release에서 바이너리 다운로드
@@ -200,7 +201,7 @@ spec:
       readOnlyRootFilesystem: true
       privileged: false
 ----
-** 어플리케이션에서 추가/수정 해야하는 루트 디렉토리 경로가 있다면 `emptyDir: {}`로 `volumeMount` 해주면 된다.
+** 어플리케이션에서 추가/수정 해야하는 루트 디렉토리 경로가 있다면 `emptyDir: {}` 로 `volumeMount` 해주면 된다.
 * 이벤트 로그 기록 설정 - Auditing
 ** xref:https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/[Audit]
 1. `Policy` 리소스 파일 생성
