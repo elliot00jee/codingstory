@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>CheatSheet for CKA :: mypage</title>
+    <title>CheatSheet for CKS :: mypage</title>
     <link rel="canonical" href="https://elliot00jee.github.io/mypage/codingstory/latest/cks/cheat-sheet-for-cks.html">
     <meta name="generator" content="Antora 3.1.2">
     <link rel="stylesheet" href="../../../_/css/site.css">
@@ -103,7 +103,7 @@
     <span class="nav-text">CKS</span>
 <ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="cheat-sheet-for-cks.html">CheatSheet for CKA</a>
+    <a class="nav-link" href="cheat-sheet-for-cks.html">CheatSheet for CKS</a>
   </li>
 </ul>
   </li>
@@ -153,7 +153,7 @@
   <ul>
     <li><a href="../index.html">CodingStory</a></li>
     <li>CKS</li>
-    <li><a href="cheat-sheet-for-cks.html">CheatSheet for CKA</a></li>
+    <li><a href="cheat-sheet-for-cks.html">CheatSheet for CKS</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/elliot00jee/mypage/edit/main/codingstory/docs/modules/cks/pages/cheat-sheet-for-cks.adoc">Edit this Page</a></div>
@@ -163,7 +163,7 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">CheatSheet for CKA</h1>
+<h1 class="page">CheatSheet for CKS</h1>
 <div class="ulist">
 <ul>
 <li>
@@ -480,8 +480,16 @@ metadata:
   labels:
     app: violation-pod
   annotations:
-    container.apparmor.security.beta.kubernetes.io/&lt;container_name&gt;: localhost/&lt;profile_name&gt;</code></pre>
+    container.apparmor.security.beta.kubernetes.io/&lt;container_name&gt;: localhost/&lt;profile_name&gt; <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>pod의 metadata의 annotations 부분</td>
+</tr>
+</table>
 </div>
 </li>
 </ul>
@@ -702,7 +710,7 @@ spec:
 </div>
 </li>
 <li>
-<p>어플리케이션에서 추가/수정 해야하는 루트 디렉토리 경로가 있다면 <code>emptyDir: {}`로 `volumeMount</code> 해주면 된다.</p>
+<p>어플리케이션에서 추가/수정 해야하는 루트 디렉토리 경로가 있다면 <code>emptyDir: {}</code> 로 <code>volumeMount</code> 해주면 된다.</p>
 </li>
 </ul>
 </div>
