@@ -1,0 +1,2 @@
+.CKS
+* xref:cheat-sheet-for-cks.adoc[]

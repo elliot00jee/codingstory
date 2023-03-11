@@ -13,4 +13,5 @@ nav:
   - modules/documentation/nav.adoc
   - modules/algorithms/nav.adoc
   - modules/cka/nav.adoc
+  - modules/cks/nav.adoc
 
